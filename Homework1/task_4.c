@@ -2,12 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-bool* getArrayOfPrimes(int N)
+void fillArrayOfPrimes(bool* isPrime, int N)
 {
-    bool* isPrime = malloc(N * sizeof(bool));
-    for (int i = 2; i < N; i++)
-        isPrime[i] = true;
-
     for (int i = 2; i * i < N; i++) {
         if (isPrime[i]) {
             for (int j = 2 * i; j < N; j += i) {
@@ -15,16 +11,17 @@ bool* getArrayOfPrimes(int N)
             }
         }
     }
-    return isPrime;
 }
 void printPrimeNumsUptoN(int N)
 {
-    bool* isPrime = getArrayOfPrimes(N);
+    bool* isPrime = malloc(N * sizeof(bool));
+    for (int i = 2; i < N; i++)
+        isPrime[i] = true;
+    fillArrayOfPrimes(isPrime, N);
     printf("Простые числа до %i:\n", N);
     for (int i = 2; i < N; i++) {
-        if (isPrime[i]) {
+        if (isPrime[i])
             printf("%i\n", i);
-        }
     }
     free(isPrime);
 }
