@@ -1,21 +1,17 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 void print2DArray(int n, int** array)
 {
     for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            printf("%i\t", *(*(array + i) + j));
-        }
+        for (int j = 0; j < n; j++)
+            printf("%i\t", array[i][j]);
         printf("\n");
     }
 }
 
-void printSpiral(int n)
+void fillSpiralArray(int n, int** spiralArray)
 {
-    int** spiralArray = (int**)malloc(n * sizeof(int*));
-    for (int i = 0; i < n; i++)
-        spiralArray[i] = (int*)calloc(n, sizeof(int));
-
     int startPos = n / 2, i = startPos, j = startPos, currentNumber = 1, curLen = 0;
     spiralArray[i][j] = currentNumber;
     while (currentNumber < n * n) {
@@ -31,34 +27,38 @@ void printSpiral(int n)
             currentNumber += 1;
             spiralArray[i][j] = currentNumber;
         }
-        int flag = 1;
+        bool flag = true;
         while ((currentNumber != n * n) && (flag || abs(j - startPos) < curLen)) {
-            flag = 0;
+            flag = false;
             j -= 1;
             currentNumber += 1;
             spiralArray[i][j] = currentNumber;
         }
-        flag = 1;
+        flag = true;
         while ((currentNumber != n * n) && (flag || abs(i - startPos) < curLen)) {
-            flag = 0;
+            flag = false;
             i -= 1;
             currentNumber += 1;
             spiralArray[i][j] = currentNumber;
         }
     }
-    print2DArray(n, spiralArray);
-    for (int i = 0; i < n; i++) {
-        free(spiralArray[i]);
-    }
-    free(spiralArray);
 }
 
 int main()
 {
-    int n;
+    int n = 0;
     printf("Введите нечётное число n: ");
     scanf("%i", &n);
+
+    int** spiralArray = (int**)malloc(n * sizeof(int*));
+    for (int i = 0; i < n; i++)
+        spiralArray[i] = (int*)calloc(n, sizeof(int));
+
+    fillSpiralArray(n, spiralArray);
     printf("Спираль с числами от 1 до %i\n", n * n);
-    printSpiral(n);
+    print2DArray(n, spiralArray);
+
+    for (int i = 0; i < n; i++)
+        free(spiralArray[i]);
     return 0;
 }
