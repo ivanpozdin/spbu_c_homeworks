@@ -1,6 +1,6 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 int compare(const void* a, const void* b)
 {
@@ -35,7 +35,7 @@ int main()
     printf("Введите числа через пробел: ");
     for (int i = 0; i < arraySize; i++)
         scanf("%i", &array[i]);
-    
+
     if (getMaximumElementOfArrayThatOccursMoreThanOnce(array, arraySize, &item)) {
         printf("Максимальный элемент массива, встречающийся более одного раза: %i", item);
     } else {
