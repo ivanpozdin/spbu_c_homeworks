@@ -1,23 +1,32 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void printPrimeNumsUptoN(int N)
+bool* getArrayOfPrimes(int N)
 {
-    char* isNotPrime = calloc(N, sizeof(char));
+    bool* isPrime = malloc(N * sizeof(bool));
+    for (int i = 2; i < N; i++)
+        isPrime[i] = true;
+
     for (int i = 2; i * i < N; i++) {
-        if (!isNotPrime[i]) {
+        if (isPrime[i]) {
             for (int j = 2 * i; j < N; j += i) {
-                isNotPrime[j] = 1;
+                isPrime[j] = false;
             }
         }
     }
+    return isPrime;
+}
+void printPrimeNumsUptoN(int N)
+{
+    bool* isPrime = getArrayOfPrimes(N);
     printf("Простые числа до %i:\n", N);
     for (int i = 2; i < N; i++) {
-        if (!isNotPrime[i]) {
+        if (isPrime[i]) {
             printf("%i\n", i);
         }
     }
-    free(isNotPrime);
+    free(isPrime);
 }
 
 int main()
