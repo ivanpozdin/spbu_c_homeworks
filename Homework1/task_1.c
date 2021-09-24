@@ -20,7 +20,7 @@ int countQuotient(int dividend, int divisor)
 
 int main()
 {
-    int dividend, divisor;
+    int dividend = 0, divisor = 0;
     printf("Введите делимое и делитель: ");
     scanf("%i %i", &dividend, &divisor);
     printf("Неполное частное равно %i", countQuotient(dividend, divisor));
