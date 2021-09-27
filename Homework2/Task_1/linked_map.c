@@ -1,43 +1,36 @@
 #include "linked_map.h"
-#include <printf.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdlib.h>
 
-struct LinkedMap{
+struct LinkedMap {
     LinkedMapElement* head;
-    LinkedMapElement* tail;
-    int LinkedMapSize;
 };
 
-struct LinkedMapElement{
-    const char* key;
+struct LinkedMapElement {
+    char key[127];
     int value;
     struct LinkedMapElement* nextElement;
 };
 
-LinkedMap* makeNewLinkedMap(){
+LinkedMap* makeNewLinkedMap()
+{
     LinkedMap* map = malloc(sizeof(LinkedMap));
     map->head = NULL;
-    map->tail = NULL;
-    map->LinkedMapSize = 0;
     return map;
 }
 
-int get(LinkedMap *map, const char *key){
-    LinkedMapElement* currentElement = map->head;
-    while(currentElement != NULL){
-        if (currentElement->key == key){
-            return currentElement->value;
-        }
-        currentElement = currentElement->nextElement;
-    }
+struct LinkedMapElement* makeNewLinkedMapElement(const char* key, int value)
+{
+    LinkedMapElement* mapElement = malloc(sizeof(LinkedMapElement));
+    strcpy(mapElement->key, key);
+    mapElement->value = value;
+    mapElement->nextElement = NULL;
+    return mapElement;
 }
 
-bool hasKey(LinkedMap *map, const char *key){
+bool hasKey(LinkedMap* map, const char* key)
+{
     LinkedMapElement* currentElement = map->head;
-    while(currentElement != NULL){
-        if (currentElement->key == key){
+    while (currentElement != NULL) {
+        if (strcmp(currentElement->key, key) == 0) {
             return true;
         }
         currentElement = currentElement->nextElement;
@@ -45,9 +38,66 @@ bool hasKey(LinkedMap *map, const char *key){
     return false;
 }
 
-void put(LinkedMap *map, const char *key, int value){
+int get(struct LinkedMap* map, const char* key)
+{
+    LinkedMapElement* currentElement = map->head;
+    while (currentElement != NULL) {
+        if ((strcmp(currentElement->key, key) == 0)) {
+            return currentElement->value;
+        }
+        currentElement = currentElement->nextElement;
+    }
+}
+
+void addOne(struct LinkedMap* map, const char* key)
+{
+    LinkedMapElement* currentElement = map->head;
+    while (currentElement != NULL) {
+        if ((strcmp(currentElement->key, key) == 0)) {
+            currentElement->value++;
+            break;
+        }
+        currentElement = currentElement->nextElement;
+    }
+}
+void insertKeyAtTheEnd(struct LinkedMap* map, const char* key)
+{
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
-    newElement->key = key;
-    newElement->value = value;
+    if (map->head == NULL) {
+        map->head = newElement;
+    } else {
+        LinkedMapElement* currentElement = map->head;
+        while (currentElement->nextElement != NULL) {
+            currentElement = currentElement->nextElement;
+        }
+        currentElement->nextElement = newElement;
+    }
+    strcpy(newElement->key, key);
+    newElement->value = 1;
     newElement->nextElement = NULL;
+}
+void put(LinkedMap* map, const char* word)
+{
+    if (hasKey(map, word)) {
+        addOne(map, word);
+    } else {
+        insertKeyAtTheEnd(map, word);
+    }
+}
+
+void printResultInFile(FILE* outputFile, struct LinkedMap* map)
+{
+    LinkedMapElement* currentElement = map->head;
+    while (currentElement != NULL) {
+        fprintf(outputFile, "%s %i\n", currentElement->key, currentElement->value);
+        currentElement = currentElement->nextElement;
+    }
+}
+void printResult(struct LinkedMap* map)
+{
+    LinkedMapElement* currentElement = map->head;
+    while (currentElement != NULL) {
+        printf("%s %i\n", currentElement->key, currentElement->value);
+        currentElement = currentElement->nextElement;
+    }
 }
