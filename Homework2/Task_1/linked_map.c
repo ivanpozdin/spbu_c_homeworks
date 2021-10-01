@@ -60,6 +60,7 @@ void addOne(struct LinkedMap* map, const char* key)
         currentElement = currentElement->nextElement;
     }
 }
+
 void insertKeyAtTheEnd(struct LinkedMap* map, const char* key)
 {
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
@@ -76,6 +77,7 @@ void insertKeyAtTheEnd(struct LinkedMap* map, const char* key)
     newElement->value = 1;
     newElement->nextElement = NULL;
 }
+
 void put(LinkedMap* map, const char* word)
 {
     if (hasKey(map, word)) {
@@ -90,14 +92,6 @@ void printResultInFile(FILE* outputFile, struct LinkedMap* map)
     LinkedMapElement* currentElement = map->head;
     while (currentElement != NULL) {
         fprintf(outputFile, "%s %i\n", currentElement->key, currentElement->value);
-        currentElement = currentElement->nextElement;
-    }
-}
-void printResult(struct LinkedMap* map)
-{
-    LinkedMapElement* currentElement = map->head;
-    while (currentElement != NULL) {
-        printf("%s %i\n", currentElement->key, currentElement->value);
         currentElement = currentElement->nextElement;
     }
 }

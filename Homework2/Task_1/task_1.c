@@ -4,12 +4,12 @@ int main()
 {
     LinkedMap* map = makeNewLinkedMap();
     char* nameOfInputFile = (char*)malloc(150 * sizeof(char));
-    printf("Введите название файла, содержимое которого нужно проанализоровать:\n");
+    printf("Enter the name of the file whose contents you want to analyze:\n");
     scanf("%s", nameOfInputFile);
     FILE* inputFile = fopen(nameOfInputFile, "r");
 
     char* nameOfOutputFile = (char*)malloc(150 * sizeof(char));
-    printf("Введите название файла, в который нужно записать результат частотного анализа:\n");
+    printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
     scanf("%s", nameOfOutputFile);
     FILE* outputFile = fopen(nameOfOutputFile, "w");
 
@@ -18,8 +18,8 @@ int main()
         put(map, word);
     }
     int variant = 0;
-    printf("Если хотите увидеть весь список пар вида - слово встречаемость - введите 0\n");
-    printf("Если хотите увидеть встречаемость конкретных слов, то введите 1, а затем кол-во разных слов, после этого вводите эти слова\n");
+    printf("If you want to see the entire list of pairs of the form - the word occurrence - enter 0\n");
+    printf("If you want to see the occurrence of specific words, then enter 1, and then the number of different words, then enter these words\n");
     scanf("%i", &variant);
     if (variant == 0) {
         printResultInFile(outputFile, map);
