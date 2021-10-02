@@ -22,18 +22,16 @@ LinkedMap* makeNewLinkedMap()
 LinkedMapElement* find(LinkedMap* map, const char* key)
 {
     for (LinkedMapElement* current = map->head; current; current = current->nextElement) {
-        if (strcmp(current->key, key) == 0) {
+        if (strcmp(current->key, key) == 0)
             return current;
-        }
     }
     return NULL;
 }
 
 bool hasKey(LinkedMap* map, const char* key)
 {
-    if (!find(map, key)) {
+    if (!find(map, key))
         return false;
-    }
     return true;
 }
 
@@ -52,18 +50,17 @@ void insertKey(struct LinkedMap* map, const char* key, int maxSizeOfKey)
 {
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
     newElement->nextElement = map->head;
-    strcpy_s(newElement->key, maxSizeOfKey, key);
+    strcpy(newElement->key, key);
     newElement->value = 1;
     map->head = newElement;
 }
 
 void put(LinkedMap* map, const char* key, int maxSizeOfKey)
 {
-    if (hasKey(map, key)) {
+    if (hasKey(map, key))
         addOne(map, key);
-    } else {
+    else
         insertKey(map, key, maxSizeOfKey);
-    }
 }
 
 void printResultInFile(FILE* outputFile, struct LinkedMap* map)
@@ -79,7 +76,7 @@ void deleteMap(LinkedMap* map)
 {
     LinkedMapElement* currentElement = map->head;
     LinkedMapElement* nextElement = NULL;
-    while (currentElement != NULL) {
+    while (currentElement) {
         nextElement = currentElement->nextElement;
         free(currentElement);
         currentElement = nextElement;

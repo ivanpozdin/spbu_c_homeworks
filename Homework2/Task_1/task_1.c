@@ -13,7 +13,7 @@ int main()
     scanf("%s", nameOfOutputFile);
     FILE* outputFile = fopen(nameOfOutputFile, "w");
 
-    char word[127];
+    char word[128];
     while (fscanf(inputFile, "%s", word) != EOF) {
         put(map, word, 128);
     }
@@ -21,9 +21,9 @@ int main()
     printf("If you want to see the entire list of pairs of the form - the word occurrence - enter 0\n");
     printf("If you want to see the occurrence of specific words, then enter 1, and then the number of different words, then enter these words\n");
     scanf("%i", &variant);
-    if (variant == 0) {
+    if (variant == 0)
         printResultInFile(outputFile, map);
-    } else {
+    else {
         int amountOfWords = 0;
         scanf("%i", &amountOfWords);
         char key[127];
