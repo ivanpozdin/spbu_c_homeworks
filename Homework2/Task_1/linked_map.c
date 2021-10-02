@@ -31,7 +31,7 @@ LinkedMapElement* find(LinkedMap* map, const char* key)
 
 bool hasKey(LinkedMap* map, const char* key)
 {
-    if (!find(map, key)){
+    if (!find(map, key)) {
         return false;
     }
     return true;
