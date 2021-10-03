@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 typedef struct LinkedMap LinkedMap;
 typedef struct LinkedMapElement LinkedMapElement;
 
