@@ -26,7 +26,7 @@ int main()
     scanf("%i", &variant);
     if (variant == 0)
         printAllKeysAndValues(outputFile, map, ',');
-    else if (variant == 1){
+    else if (variant == 1) {
         int amountOfWords = 0;
         scanf("%i", &amountOfWords);
         char key[127];
@@ -34,8 +34,7 @@ int main()
             scanf("%s", key);
             fprintf(outputFile, "%s %i\n", key, get(map, key, 0));
         }
-    }
-    else{
+    } else {
         printf("You entered wrong variant");
     }
     deleteMap(map);
