@@ -7,7 +7,7 @@ struct LinkedMap {
 };
 
 struct LinkedMapElement {
-    char key[128];
+    char* key;
     int value;
     struct LinkedMapElement* nextElement;
 };
@@ -52,6 +52,7 @@ void insertKey(LinkedMap* map, const char* key, int value, int maxSizeOfKey)
 {
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
     newElement->nextElement = map->head;
+    newElement->key = malloc(sizeof(char) * maxSizeOfKey);
     strcpy(newElement->key, key);
     newElement->value = value;
     map->head = newElement;
@@ -80,6 +81,7 @@ void deleteMap(LinkedMap* map)
     LinkedMapElement* nextElement = NULL;
     while (currentElement) {
         nextElement = currentElement->nextElement;
+        free(currentElement->key);
         free(currentElement);
         currentElement = nextElement;
     }

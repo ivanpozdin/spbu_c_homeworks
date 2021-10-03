@@ -32,7 +32,7 @@ int main()
     else if (variant == 1) {
         int amountOfWords = 0;
         scanf("%i", &amountOfWords);
-        char key[127];
+        char key[128];
         for (int i = 0; i < amountOfWords; i++) {
             scanf("%s", key);
             fprintf(outputFile, "%s %i\n", key, get(map, key, 0));
