@@ -12,7 +12,10 @@ int main()
     printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
     scanf("%s", nameOfOutputFile);
     FILE* outputFile = fopen(nameOfOutputFile, "w");
-
+    if (!(inputFile || outputFile)) {
+        printf("There is something wrong with the files");
+        exit(-1);
+    }
     char word[128];
     while (fscanf(inputFile, "%s", word) != EOF) {
         if (hasKey(map, word))
