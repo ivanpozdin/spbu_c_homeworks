@@ -12,8 +12,9 @@ typedef struct LinkedMap LinkedMap;
 typedef struct LinkedMapElement LinkedMapElement;
 
 LinkedMap* makeNewLinkedMap();
-void put(LinkedMap* map, const char* word, int maxSizeOfKey);
-int get(LinkedMap* map, const char* key);
-void printResultInFile(FILE* outputFile, struct LinkedMap* map);
+void put(LinkedMap* map, const char* word, int value, int maxSizeOfKey);
+int get(LinkedMap* map, const char* key, int defaultValue);
+void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separator);
 void deleteMap(LinkedMap* map);
+bool hasKey(LinkedMap* map, const char* key);
 #endif // SPBU_C_HOMEWORKS_LIST_H

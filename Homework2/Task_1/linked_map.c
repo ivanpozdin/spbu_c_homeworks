@@ -35,39 +35,41 @@ bool hasKey(LinkedMap* map, const char* key)
     return true;
 }
 
-int get(struct LinkedMap* map, const char* key)
+int get(LinkedMap* map, const char* key, int defaultValue)
 {
-    return find(map, key)->value;
+    if (hasKey(map, key))
+        return find(map, key)->value;
+    return defaultValue;
 }
 
-void addOne(struct LinkedMap* map, const char* key)
+void changeValue(LinkedMap* map, const char* key, int newValue)
 {
     LinkedMapElement* currentElement = find(map, key);
-    currentElement->value++;
+    currentElement->value = newValue;
 }
 
-void insertKey(struct LinkedMap* map, const char* key, int maxSizeOfKey)
+void insertKey(LinkedMap* map, const char* key, int value, int maxSizeOfKey)
 {
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
     newElement->nextElement = map->head;
     strcpy(newElement->key, key);
-    newElement->value = 1;
+    newElement->value = value;
     map->head = newElement;
 }
 
-void put(LinkedMap* map, const char* key, int maxSizeOfKey)
+void put(LinkedMap* map, const char* key, int value, int maxSizeOfKey)
 {
     if (hasKey(map, key))
-        addOne(map, key);
+        changeValue(map, key, value);
     else
-        insertKey(map, key, maxSizeOfKey);
+        insertKey(map, key, value, maxSizeOfKey);
 }
 
-void printResultInFile(FILE* outputFile, struct LinkedMap* map)
+void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separator)
 {
     LinkedMapElement* currentElement = map->head;
     while (currentElement) {
-        fprintf(outputFile, "%s %i\n", currentElement->key, currentElement->value);
+        fprintf(outputFile, "%s%c%i\n", currentElement->key, separator, currentElement->value);
         currentElement = currentElement->nextElement;
     }
 }

@@ -15,22 +15,28 @@ int main()
 
     char word[128];
     while (fscanf(inputFile, "%s", word) != EOF) {
-        put(map, word, 128);
+        if (hasKey(map, word))
+            put(map, word, get(map, word, 0) + 1, 128);
+        else
+            put(map, word, 1, 128);
     }
     int variant = 0;
-    printf("If you want to see the entire list of pairs of the form - the word occurrence - enter 0\n");
-    printf("If you want to see the occurrence of specific words, then enter 1, and then the number of different words, then enter these words\n");
+    printf("If you want to see the entire list of pairs of the form - word, occurrence - enter 0\n");
+    printf("If you want to see the occurrence of specific words,\nthen enter 1, and then the number of different words, then enter these words\n");
     scanf("%i", &variant);
     if (variant == 0)
-        printResultInFile(outputFile, map);
-    else {
+        printAllKeysAndValues(outputFile, map, ',');
+    else if (variant == 1){
         int amountOfWords = 0;
         scanf("%i", &amountOfWords);
         char key[127];
         for (int i = 0; i < amountOfWords; i++) {
             scanf("%s", key);
-            fprintf(outputFile, "%s %i\n", key, get(map, key));
+            fprintf(outputFile, "%s %i\n", key, get(map, key, 0));
         }
+    }
+    else{
+        printf("You entered wrong variant");
     }
     deleteMap(map);
     fclose(inputFile);
