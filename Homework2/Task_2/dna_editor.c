@@ -1,4 +1,7 @@
 #include "dna_editor.h"
+
+void freePartOfList(LinkedListElement* start, LinkedListElement* end);
+
 struct LinkedList {
     LinkedListElement* head;
 };
@@ -32,16 +35,16 @@ LinkedListElement* findFirstElementOfSequence(LinkedList* list, const char* sequ
         bool isSequence = true;
         LinkedListElement* current2 = current1;
         while (current2 && i < strlen(sequence) && isSequence) {
-            if (current2->letter != sequence[i]) {
+            if (current2->letter != sequence[i])
                 isSequence = false;
-            }
+
             current2 = current2->nextElement;
             i++;
         }
-        if (isSequence) {
+        if (isSequence)
             return current1;
-        }
     }
+    return NULL;
 }
 
 LinkedListElement* findLastElementOfSequence(LinkedList* list, const char* sequence)
@@ -50,28 +53,34 @@ LinkedListElement* findLastElementOfSequence(LinkedList* list, const char* seque
         int i = 0;
         bool isSequence = true;
         LinkedListElement* current2 = current1;
-        while (current2 && i < strlen(sequence) && isSequence) {
+        while (current2 && i < strlen(sequence)) {
             if (current2->letter != sequence[i]) {
                 isSequence = false;
+                break;
             }
+            if (i + 1 >= strlen(sequence))
+                break;
             current2 = current2->nextElement;
             i++;
         }
-        if (isSequence) {
+        if (isSequence)
             return current2;
-        }
     }
+    return NULL;
 }
 
 void delete (LinkedList* list, const char* start, const char* end)
 {
     LinkedListElement* firstElementOfStart = findFirstElementOfSequence(list, start);
+
     LinkedListElement* lastElementBeforeStart = list->head;
     while (lastElementBeforeStart->nextElement != firstElementOfStart) {
         lastElementBeforeStart = lastElementBeforeStart->nextElement;
     }
-    LinkedListElement* firstElementAfterEnd = findLastElementOfSequence(list, end)->nextElement;
+    LinkedListElement* lastElementOfEnd = findLastElementOfSequence(list, end);
+    LinkedListElement* firstElementAfterEnd = lastElementOfEnd->nextElement;
     lastElementBeforeStart->nextElement = firstElementAfterEnd;
+    freePartOfList(firstElementOfStart, lastElementOfEnd);
 }
 
 void insert(LinkedList* list, const char* start, const char* fragment)
@@ -79,35 +88,58 @@ void insert(LinkedList* list, const char* start, const char* fragment)
     LinkedListElement* elementBeforeFragment = findLastElementOfSequence(list, start);
     LinkedListElement* elementAfterFragment = elementBeforeFragment->nextElement;
     LinkedList* fragmentList = createLinkedList(fragment);
-    elementBeforeFragment->nextElement = fragmentList->head;
+
     LinkedListElement* lastElementOfFragment = fragmentList->head;
     while (lastElementOfFragment->nextElement) {
         lastElementOfFragment = lastElementOfFragment->nextElement;
     }
+    elementBeforeFragment->nextElement = fragmentList->head;
     lastElementOfFragment->nextElement = elementAfterFragment;
 }
 
 void replace(LinkedList* list, const char* template, const char* fragment)
 {
     LinkedList* fragmentList = createLinkedList(fragment);
-    LinkedListElement* lastElementBeforeTemplate = list->head;
     LinkedListElement* firstElementOfTemplate = findFirstElementOfSequence(list, template);
+    LinkedListElement* lastElementOfTemplate = findLastElementOfSequence(list, template);
+
+    LinkedListElement* lastElementBeforeTemplate = list->head;
     while (lastElementBeforeTemplate->nextElement != firstElementOfTemplate) {
         lastElementBeforeTemplate = lastElementBeforeTemplate->nextElement;
     }
-    LinkedListElement* firstElementAfterTemplate = firstElementOfTemplate->nextElement->nextElement;
+    LinkedListElement* firstElementAfterTemplate = lastElementOfTemplate->nextElement;
+
     LinkedListElement* lastElementOfFragment = fragmentList->head;
     while (lastElementOfFragment->nextElement) {
         lastElementOfFragment = lastElementOfFragment->nextElement;
     }
     lastElementBeforeTemplate->nextElement = fragmentList->head;
     lastElementOfFragment->nextElement = firstElementAfterTemplate;
+
+    freePartOfList(firstElementOfTemplate, lastElementOfTemplate);
 }
 
-void printList(LinkedList* list)
+void freePartOfList(LinkedListElement* start, LinkedListElement* end)
+{
+    LinkedListElement* previous = start;
+    LinkedListElement* current = start->nextElement;
+    while (current != end) {
+        free(previous);
+        previous = current;
+        current = current->nextElement;
+    }
+    free(previous);
+}
+
+void freeList(LinkedList* list)
+{
+    freePartOfList(list->head, NULL);
+    free(list);
+}
+
+void printList(FILE* outputFile, LinkedList* list)
 {
     for (LinkedListElement* current = list->head; current; current = current->nextElement) {
-        printf("%c", current->letter);
+        fprintf(outputFile, "%c", current->letter);
     }
-    printf("\n");
 }

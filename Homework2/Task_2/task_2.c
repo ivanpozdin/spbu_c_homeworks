@@ -2,31 +2,51 @@
 
 int main()
 {
+
+    char nameOfInputFile[150] = "";
+    printf("Enter the name of input file:\n");
+    scanf("%s", nameOfInputFile);
+    FILE* inputFile = fopen(nameOfInputFile, "r");
+
+    char nameOfOutputFile[150] = "";
+    printf("Enter the name of output file:\n");
+    scanf("%s", nameOfOutputFile);
+    FILE* outputFile = fopen(nameOfOutputFile, "w");
+    if (!(inputFile || outputFile)) {
+        printf("There is something wrong with the files");
+        exit(-1);
+    }
+
     int sizeOfSequence;
-    scanf("%i", &sizeOfSequence);
+    fscanf(inputFile, "%i", &sizeOfSequence);
+
     char* sequence = malloc(sizeof(char) * (sizeOfSequence + 1));
-    scanf("%s", sequence);
+    fscanf(inputFile, "%s", sequence);
+
     LinkedList* list = createLinkedList(sequence);
-    char commands[3][8] = { "DELETE", "INSERT", "REPLACE" };
     int amountOfCommands = 0;
-    scanf("%i", &amountOfCommands);
+    fscanf(inputFile, "%i", &amountOfCommands);
+
     for (int i = 0; i < amountOfCommands; i++) {
         char argument1[8];
         char argument2[128];
         char argument3[128];
-        scanf("%s", argument1);
-        scanf("%s", argument2);
-        scanf("%s", argument3);
-        if (strcmp(argument1, "DELETE") == 0) {
+        fscanf(inputFile, "%s", argument1);
+        fscanf(inputFile, "%s", argument2);
+        fscanf(inputFile, "%s", argument3);
+
+        if (strcmp(argument1, "DELETE") == 0)
             delete (list, argument2, argument3);
-            printList(list);
-        } else if (strcmp(argument1, "INSERT") == 0) {
+        else if (strcmp(argument1, "INSERT") == 0)
             insert(list, argument2, argument3);
-            printList(list);
-        } else if (strcmp(argument1, "REPLACE") == 0) {
+        else if (strcmp(argument1, "REPLACE") == 0)
             replace(list, argument2, argument3);
-            printList(list);
-        }
+
+        printList(outputFile, list);
+        fprintf(outputFile, "\n");
     }
+
+    free(sequence);
+    freeList(list);
     return 0;
 }
