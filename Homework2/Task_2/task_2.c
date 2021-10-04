@@ -2,7 +2,6 @@
 
 int main()
 {
-
     char nameOfInputFile[150] = "";
     printf("Enter the name of input file:\n");
     scanf("%s", nameOfInputFile);
@@ -28,12 +27,8 @@ int main()
     fscanf(inputFile, "%i", &amountOfCommands);
 
     for (int i = 0; i < amountOfCommands; i++) {
-        char argument1[8];
-        char argument2[128];
-        char argument3[128];
-        fscanf(inputFile, "%s", argument1);
-        fscanf(inputFile, "%s", argument2);
-        fscanf(inputFile, "%s", argument3);
+        char argument1[8], argument2[128], argument3[128];
+        fscanf(inputFile, "%s%s%s", argument1, argument2, argument3);
 
         if (strcmp(argument1, "DELETE") == 0)
             delete (list, argument2, argument3);
