@@ -34,5 +34,11 @@ int main()
         printf("%i ", vector4Coordinates[i]);
     }
     printf("\n");
+    freeVector(vector1);
+    freeVector(vector2);
+    freeVector(vector3);
+    freeVector(vector4);
+    free(array1);
+    free(array2);
     return 0;
 }

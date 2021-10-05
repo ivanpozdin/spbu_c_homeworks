@@ -14,5 +14,6 @@ Vector* calculateSumOfTwoVectors(Vector* vector1, Vector* vector2);
 Vector* calculateDifferenceOfTwoVectors(Vector* vector1, Vector* vector2);
 double calculateScalarProduct(Vector* vector1, Vector* vector2);
 double findLengthOfVector(Vector* vec);
+void freeVector(Vector* vec);
 
 #endif // SPBU_C_HOMEWORKS_TEST1_VECTOR_H_

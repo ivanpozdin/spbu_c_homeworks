@@ -58,3 +58,8 @@ int* getCoordinates(Vector* vec)
 {
     return vec->coordinates;
 }
+void freeVector(Vector* vec)
+{
+    free(vec->coordinates);
+    free(vec);
+}
