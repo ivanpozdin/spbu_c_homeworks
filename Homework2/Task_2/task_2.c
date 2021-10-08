@@ -2,8 +2,19 @@
 
 int main(int argc, char* argv[], char* envp[])
 {
-    FILE* inputFile = fopen(argv[1], "r");
-    FILE* outputFile = fopen(argv[2], "w");
+    char nameOfInputFile[150] = "";
+    char nameOfOutputFile[150] = "";
+    if (argc == 1) {
+        printf("Enter the name of the file whose contents you want to analyze:\n");
+        scanf("%s", nameOfInputFile);
+        printf("Enter the name of the file in which you want to record the result:\n");
+        scanf("%s", nameOfOutputFile);
+    } else {
+        strcpy(nameOfInputFile, argv[1]);
+        strcpy(nameOfOutputFile, argv[2]);
+    }
+    FILE* inputFile = fopen(nameOfInputFile, "r");
+    FILE* outputFile = fopen(nameOfOutputFile, "w");
 
     if ((bool)inputFile ^ (bool)outputFile) {
         if (inputFile)
