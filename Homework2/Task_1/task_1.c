@@ -18,7 +18,7 @@ int main(int argc, char* argv[], char* envp[])
 
     LinkedMap* map = makeNewLinkedMap();
 
-    if ((bool)inputFile ^ (bool)outputFile) {
+    if (!inputFile || !outputFile) {
         if (inputFile)
             fclose(inputFile);
         if (outputFile)
