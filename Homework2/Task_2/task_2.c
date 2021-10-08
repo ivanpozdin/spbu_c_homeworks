@@ -16,7 +16,7 @@ int main(int argc, char* argv[], char* envp[])
     FILE* inputFile = fopen(nameOfInputFile, "r");
     FILE* outputFile = fopen(nameOfOutputFile, "w");
 
-    if ((bool)inputFile ^ (bool)outputFile) {
+    if (!inputFile || !outputFile) {
         if (inputFile)
             fclose(inputFile);
         if (outputFile)
