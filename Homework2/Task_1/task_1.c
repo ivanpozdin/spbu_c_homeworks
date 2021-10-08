@@ -4,12 +4,12 @@ int main(int argc, char* argv[], char* envp[])
 {
     char nameOfInputFile[150] = "";
     char nameOfOutputFile[150] = "";
-    if (argc == 1){
+    if (argc == 1) {
         printf("Enter the name of the file whose contents you want to analyze:\n");
         scanf("%s", nameOfInputFile);
         printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
         scanf("%s", nameOfOutputFile);
-    }else{
+    } else {
         strcpy(nameOfInputFile, argv[1]);
         strcpy(nameOfOutputFile, argv[2]);
     }
