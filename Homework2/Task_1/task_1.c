@@ -12,16 +12,18 @@ int main()
     printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
     scanf("%s", nameOfOutputFile);
     FILE* outputFile = fopen(nameOfOutputFile, "w");
-    if (!(inputFile || outputFile)) {
+    if ((bool)inputFile ^ (bool)outputFile) {
+        if (inputFile)
+            fclose(inputFile);
+        if (outputFile)
+            fclose(outputFile);
+
         printf("There is something wrong with the files");
-        exit(-1);
+        return -1;
     }
     char word[128];
     while (fscanf(inputFile, "%s", word) != EOF) {
-        if (hasKey(map, word))
-            put(map, word, get(map, word, 0) + 1, 128);
-        else
-            put(map, word, 1, 128);
+        put(map, word, get(map, word, 0) + 1);
     }
     int variant = 0;
     printf("If you want to see the entire list of pairs of the form - word, occurrence - enter 0\n");

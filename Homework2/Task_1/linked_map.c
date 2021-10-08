@@ -30,9 +30,7 @@ LinkedMapElement* find(LinkedMap* map, const char* key)
 
 bool hasKey(LinkedMap* map, const char* key)
 {
-    if (!find(map, key))
-        return false;
-    return true;
+    return find(map, key);
 }
 
 int get(LinkedMap* map, const char* key, int defaultValue)
@@ -48,42 +46,38 @@ void changeValue(LinkedMap* map, const char* key, int newValue)
     currentElement->value = newValue;
 }
 
-void insertKey(LinkedMap* map, const char* key, int value, int maxSizeOfKey)
+void insertKey(LinkedMap* map, const char* key, int value)
 {
     LinkedMapElement* newElement = malloc(sizeof(LinkedMapElement));
     newElement->nextElement = map->head;
-    newElement->key = malloc(sizeof(char) * maxSizeOfKey);
+    newElement->key = malloc(sizeof(char) * (strlen(key) + 1));
     strcpy(newElement->key, key);
     newElement->value = value;
     map->head = newElement;
 }
 
-void put(LinkedMap* map, const char* key, int value, int maxSizeOfKey)
+void put(LinkedMap* map, const char* key, int value)
 {
     if (hasKey(map, key))
         changeValue(map, key, value);
     else
-        insertKey(map, key, value, maxSizeOfKey);
+        insertKey(map, key, value);
 }
 
 void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separator)
 {
-    LinkedMapElement* currentElement = map->head;
-    while (currentElement) {
+    for (LinkedMapElement* currentElement = map->head; currentElement; currentElement = currentElement->nextElement) {
         fprintf(outputFile, "%s%c%i\n", currentElement->key, separator, currentElement->value);
-        currentElement = currentElement->nextElement;
     }
 }
 
 void deleteMap(LinkedMap* map)
 {
-    LinkedMapElement* currentElement = map->head;
     LinkedMapElement* nextElement = NULL;
-    while (currentElement) {
+    for (LinkedMapElement* currentElement = map->head; currentElement; currentElement = nextElement) {
         nextElement = currentElement->nextElement;
         free(currentElement->key);
         free(currentElement);
-        currentElement = nextElement;
     }
     free(map);
 }

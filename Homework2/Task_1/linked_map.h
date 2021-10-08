@@ -11,7 +11,7 @@ typedef struct LinkedMap LinkedMap;
 typedef struct LinkedMapElement LinkedMapElement;
 
 LinkedMap* makeNewLinkedMap();
-void put(LinkedMap* map, const char* word, int value, int maxSizeOfKey);
+void put(LinkedMap* map, const char* key, int value);
 int get(LinkedMap* map, const char* key, int defaultValue);
 void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separator);
 void deleteMap(LinkedMap* map);
