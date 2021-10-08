@@ -2,13 +2,9 @@
 
 int main(int argc, char* argv[], char* envp[])
 {
-    char nameOfInputFile[150] = "";
-    scanf("%s", nameOfInputFile);
-    FILE* inputFile = fopen(nameOfInputFile, "r");
+    FILE* inputFile = fopen(argv[1], "r");
+    FILE* outputFile = fopen(argv[2], "w");
 
-    char nameOfOutputFile[150] = "";
-    scanf("%s", nameOfOutputFile);
-    FILE* outputFile = fopen(nameOfOutputFile, "w");
     if ((bool)inputFile ^ (bool)outputFile) {
         if (inputFile)
             fclose(inputFile);
