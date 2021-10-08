@@ -47,9 +47,9 @@ LinkedListElement* findFirstElementOfSequence(LinkedList* list, const char* sequ
     return NULL;
 }
 
-LinkedListElement* findLastElementOfSequence(LinkedList* list, const char* sequence)
+LinkedListElement* findLastElementOfSequence(struct LinkedListElement* start, const char* sequence)
 {
-    for (LinkedListElement* current1 = list->head; current1; current1 = current1->nextElement) {
+    for (LinkedListElement* current1 = start; current1; current1 = current1->nextElement) {
         int i = 0;
         bool isSequence = true;
         LinkedListElement* current2 = current1;
@@ -77,7 +77,7 @@ void delete (LinkedList* list, const char* start, const char* end)
     while (lastElementBeforeStart->nextElement != firstElementOfStart) {
         lastElementBeforeStart = lastElementBeforeStart->nextElement;
     }
-    LinkedListElement* lastElementOfEnd = findLastElementOfSequence(list, end);
+    LinkedListElement* lastElementOfEnd = findLastElementOfSequence(firstElementOfStart, end);
     LinkedListElement* firstElementAfterEnd = lastElementOfEnd->nextElement;
     lastElementBeforeStart->nextElement = firstElementAfterEnd;
     freePartOfList(firstElementOfStart, lastElementOfEnd);
@@ -85,7 +85,7 @@ void delete (LinkedList* list, const char* start, const char* end)
 
 void insert(LinkedList* list, const char* start, const char* fragment)
 {
-    LinkedListElement* elementBeforeFragment = findLastElementOfSequence(list, start);
+    LinkedListElement* elementBeforeFragment = findLastElementOfSequence(list->head, start);
     LinkedListElement* elementAfterFragment = elementBeforeFragment->nextElement;
     LinkedList* fragmentList = createLinkedList(fragment);
 
@@ -101,7 +101,7 @@ void replace(LinkedList* list, const char* template, const char* fragment)
 {
     LinkedList* fragmentList = createLinkedList(fragment);
     LinkedListElement* firstElementOfTemplate = findFirstElementOfSequence(list, template);
-    LinkedListElement* lastElementOfTemplate = findLastElementOfSequence(list, template);
+    LinkedListElement* lastElementOfTemplate = findLastElementOfSequence(list->head, template);
 
     LinkedListElement* lastElementBeforeTemplate = list->head;
     while (lastElementBeforeTemplate->nextElement != firstElementOfTemplate) {
