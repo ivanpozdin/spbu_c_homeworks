@@ -3,13 +3,9 @@
 int main(int argc, char* argv[], char* envp[])
 {
     LinkedMap* map = makeNewLinkedMap();
-    char nameOfInputFile[150] = "";
-    scanf("%s", nameOfInputFile);
-    FILE* inputFile = fopen(nameOfInputFile, "r");
 
-    char nameOfOutputFile[150] = "";
-    scanf("%s", nameOfOutputFile);
-    FILE* outputFile = fopen(nameOfOutputFile, "w");
+    FILE* inputFile = fopen(argv[1], "r");
+    FILE* outputFile = fopen(argv[2], "w");
 
     if ((bool)inputFile ^ (bool)outputFile) {
         if (inputFile)
