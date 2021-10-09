@@ -54,13 +54,11 @@ LinkedListElement* findLastElementOfSequence(struct LinkedListElement* start, co
         bool isSequence = true;
         LinkedListElement* current2 = current1;
         while (current2 && i < strlen(sequence)) {
-            if (current2->letter != sequence[i]) {
+            if (current2->letter != sequence[i])
                 isSequence = false;
-                break;
-            }
-            if (i + 1 >= strlen(sequence))
-                break;
-            current2 = current2->nextElement;
+
+            if (i + 1 < strlen(sequence))
+                current2 = current2->nextElement;
             i++;
         }
         if (isSequence)
