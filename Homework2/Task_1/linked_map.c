@@ -42,8 +42,7 @@ int get(LinkedMap* map, const char* key, int defaultValue)
 
 void changeValue(LinkedMap* map, const char* key, int newValue)
 {
-    LinkedMapElement* currentElement = find(map, key);
-    currentElement->value = newValue;
+    find(map, key)->value = newValue;
 }
 
 void insertKey(LinkedMap* map, const char* key, int value)
