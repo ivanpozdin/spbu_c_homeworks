@@ -16,7 +16,6 @@ typedef struct ListRange {
     LinkedListElement* end;
 } ListRange;
 
-
 LinkedList* createLinkedList(const char* sequence)
 {
     LinkedList* list = malloc(sizeof(LinkedList));
@@ -53,7 +52,7 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
                 end = end->nextElement;
             i++;
         }
-        if (isSequence){
+        if (isSequence) {
             range->start = start;
             range->end = end;
             break;
@@ -120,11 +119,10 @@ void replace(LinkedList* list, const char* template, const char* fragment)
 
 void freePartOfList(LinkedListElement* start, LinkedListElement* end)
 {
-    for (LinkedListElement* current = start, *next = NULL; current != end; current = next) {
+    for (LinkedListElement *current = start, *next = NULL; current != end; current = next) {
         next = current->nextElement;
         free(current);
     }
-
 }
 
 void freeList(LinkedList* list)

@@ -1,6 +1,6 @@
 #include "dna_editor.h"
 
-int main(int argc, char* argv[], char* envp[])
+int main(int argc, char* argv[])
 {
     char nameOfInputFile[150] = "";
     char nameOfOutputFile[150] = "";
