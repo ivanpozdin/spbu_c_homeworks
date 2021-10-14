@@ -31,7 +31,7 @@ int main()
         fscanf(inputFile, "%s%s%s", argument1, argument2, argument3);
 
         if (strcmp(argument1, "DELETE") == 0)
-            delete (list, argument2, argument3);
+            delete(list, argument2, argument3);
         else if (strcmp(argument1, "INSERT") == 0)
             insert(list, argument2, argument3);
         else if (strcmp(argument1, "REPLACE") == 0)
