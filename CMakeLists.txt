@@ -5,8 +5,8 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_LIB
     library/commonUtils/numericOperations.c
-        Homework2/Task_2/dna_editor.c Homework2/Task_2/dna_editor.h)
-add_library(library ${SOURCE_LIB} Homework2/Task_2/dna_editor.c Homework2/Task_2/dna_editor.h)
+        Homework2/Task_2/dna_editor.c)
+add_library(library ${SOURCE_LIB})
 
 add_executable(task_1 Homework1/task1.c)
 add_executable(task_2 Homework1/task_2.c)
