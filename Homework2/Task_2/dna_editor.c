@@ -75,13 +75,10 @@ bool delete (LinkedList* list, const char* start, const char* end)
     if (!rangeOfStart->start || !rangeOfEnd->start)
         return false;
 
-    LinkedListElement* lastElementBeforeStart = rangeOfStart->elementBeforeStart;
-    LinkedListElement* firstElementAfterEnd = rangeOfEnd->end->nextElement;
+    if (!rangeOfEnd->end->nextElement)
+        list->tail = rangeOfStart->elementBeforeStart;
 
-    if (!firstElementAfterEnd)
-        list->tail = lastElementBeforeStart;
-
-    lastElementBeforeStart->nextElement = firstElementAfterEnd;
+    rangeOfStart->elementBeforeStart->nextElement = rangeOfEnd->end->nextElement;
 
     freePartOfList(rangeOfStart->start, rangeOfEnd->end);
     free(rangeOfStart);
