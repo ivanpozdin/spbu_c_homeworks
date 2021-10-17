@@ -72,7 +72,7 @@ bool delete (LinkedList* list, const char* start, const char* end)
     ListRange* rangeOfStart = findBordersOfSequence(list->head, start);
     ListRange* rangeOfEnd = findBordersOfSequence(rangeOfStart->end->nextElement, end);
 
-    if (!rangeOfStart->start || rangeOfEnd->start)
+    if (!rangeOfStart->start || !rangeOfEnd->start)
         return false;
 
     LinkedListElement* lastElementBeforeStart = rangeOfStart->elementBeforeStart;

@@ -42,17 +42,17 @@ int main(int argc, char* argv[])
 
         if (strcmp(argument1, "DELETE") == 0) {
             if (!delete (list, argument2, argument3)) {
-                printf("couldn't find the sequence(");
+                printf("couldn't find the sequence(delete");
                 return -1;
             }
         } else if (strcmp(argument1, "INSERT") == 0) {
             if (!insert(list, argument2, argument3)) {
-                printf("couldn't find the sequence(");
+                printf("couldn't find the sequence(insert");
                 return -1;
             }
         } else if (strcmp(argument1, "REPLACE") == 0) {
             if (!replace(list, argument2, argument3)) {
-                printf("couldn't find the sequence(");
+                printf("couldn't find the sequence(replace");
                 return -1;
             }
         } else {
