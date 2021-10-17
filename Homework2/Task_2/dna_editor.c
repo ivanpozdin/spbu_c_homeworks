@@ -44,23 +44,21 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
     range->start = NULL;
     range->end = NULL;
     range->elementBeforeStart = NULL;
-    for (LinkedListElement* start = startOfSearch; start; start = start->nextElement) {
-        int i = 0;
-        bool isSequence = true;
-        LinkedListElement* end = start;
-        int sequenceLength = strlen(sequence);
-        while (end && i < sequenceLength) {
-            if (end->letter != sequence[i])
-                isSequence = false;
 
-            if (i + 1 < strlen(sequence))
-                end = end->nextElement;
-            i++;
-        }
-        if (isSequence) {
-            range->start = start;
-            range->end = end;
-            break;
+    for (LinkedListElement* start = startOfSearch; start; start = start->nextElement) {
+        int lengthOfProcessedSequence = 0;
+        int sequenceLength = strlen(sequence);
+
+        for (LinkedListElement* end = start; end; end = end->nextElement) {
+            if (end->letter != sequence[lengthOfProcessedSequence])
+                break;
+            lengthOfProcessedSequence++;
+
+            if (lengthOfProcessedSequence == sequenceLength) {
+                range->start = start;
+                range->end = end;
+                return range;
+            }
         }
         range->elementBeforeStart = start;
     }
