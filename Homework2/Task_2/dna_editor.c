@@ -48,7 +48,6 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
     for (LinkedListElement* start = startOfSearch; start; start = start->nextElement) {
         int lengthOfProcessedSequence = 0;
         int sequenceLength = strlen(sequence);
-
         for (LinkedListElement* end = start; end; end = end->nextElement) {
             if (end->letter != sequence[lengthOfProcessedSequence])
                 break;
