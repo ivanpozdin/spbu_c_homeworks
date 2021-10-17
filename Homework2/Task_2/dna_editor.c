@@ -70,13 +70,12 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
 bool delete (LinkedList* list, const char* start, const char* end)
 {
     ListRange* rangeOfStart = findBordersOfSequence(list->head, start);
-    if (!rangeOfStart->start)
+    ListRange* rangeOfEnd = findBordersOfSequence(rangeOfStart->end->nextElement, end);
+
+    if (!rangeOfStart->start || rangeOfEnd->start)
         return false;
 
     LinkedListElement* lastElementBeforeStart = rangeOfStart->elementBeforeStart;
-
-    ListRange* rangeOfEnd = findBordersOfSequence(rangeOfStart->end->nextElement, end);
-
     LinkedListElement* firstElementAfterEnd = rangeOfEnd->end->nextElement;
 
     if (!firstElementAfterEnd)
