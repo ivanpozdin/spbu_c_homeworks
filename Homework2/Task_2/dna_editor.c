@@ -112,16 +112,11 @@ bool replace(LinkedList* list, const char* template, const char* fragment)
     if (!rangeOfTemplate->start)
         return false;
 
-    LinkedListElement* lastElementBeforeTemplate = rangeOfTemplate->elementBeforeStart;
-    LinkedListElement* firstElementAfterTemplate = rangeOfTemplate->end->nextElement;
-
-    LinkedListElement* lastElementOfFragment = fragmentList->tail;
-
     if (!rangeOfTemplate->end->nextElement)
-        list->tail = lastElementOfFragment;
+        list->tail = fragmentList->tail;
 
-    lastElementBeforeTemplate->nextElement = fragmentList->head;
-    lastElementOfFragment->nextElement = firstElementAfterTemplate;
+    rangeOfTemplate->elementBeforeStart->nextElement = fragmentList->head;
+    fragmentList->tail->nextElement = rangeOfTemplate->end->nextElement;
 
     freePartOfList(rangeOfTemplate->start, rangeOfTemplate->end);
     free(rangeOfTemplate);
