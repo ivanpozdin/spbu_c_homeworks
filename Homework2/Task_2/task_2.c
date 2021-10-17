@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
         fscanf(inputFile, "%s %s %s", argument1, argument2, argument3);
 
         if (strcmp(argument1, "DELETE") == 0) {
-            if (!delete (list, argument2, argument3)) {
+            if (!delete(list, argument2, argument3)) {
                 printf("couldn't find the sequence(delete");
                 return -1;
             }
