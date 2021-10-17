@@ -89,18 +89,16 @@ bool delete (LinkedList* list, const char* start, const char* end)
 bool insert(LinkedList* list, const char* start, const char* fragment)
 {
     ListRange* rangeStart = findBordersOfSequence(list->head, start);
-    if (!rangeStart->start)
-        return false;
-    LinkedListElement* elementAfterFragment = rangeStart->end->nextElement;
     LinkedList* fragmentList = createLinkedListFromSequence(fragment);
 
-    LinkedListElement* lastElementOfFragment = fragmentList->tail;
+    if (!rangeStart->start)
+        return false;
 
-    if (!elementAfterFragment)
-        list->tail = lastElementOfFragment;
+    if (!rangeStart->end->nextElement)
+        list->tail = fragmentList->tail;
 
+    fragmentList->tail->nextElement = rangeStart->end->nextElement;
     rangeStart->end->nextElement = fragmentList->head;
-    lastElementOfFragment->nextElement = elementAfterFragment;
 
     free(rangeStart);
     return true;
