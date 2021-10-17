@@ -14,6 +14,7 @@ struct LinkedListElement {
 typedef struct ListRange {
     LinkedListElement* start;
     LinkedListElement* end;
+    LinkedListElement* elementBeforeStart;
 } ListRange;
 
 LinkedList* createLinkedList(const char* sequence)
@@ -39,6 +40,7 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
     ListRange* range = malloc(sizeof(ListRange));
     range->start = NULL;
     range->end = NULL;
+    range->elementBeforeStart = NULL;
     for (LinkedListElement* start = startOfSearch; start; start = start->nextElement) {
         int i = 0;
         bool isSequence = true;
@@ -57,18 +59,17 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
             range->end = end;
             break;
         }
+        range->elementBeforeStart = start;
     }
     return range;
 }
 
-void delete(LinkedList* list, const char* start, const char* end)
+void delete (LinkedList* list, const char* start, const char* end)
 {
     ListRange* rangeOfStart = findBordersOfSequence(list->head, start);
 
-    LinkedListElement* lastElementBeforeStart = list->head;
-    while (lastElementBeforeStart->nextElement != rangeOfStart->start) {
-        lastElementBeforeStart = lastElementBeforeStart->nextElement;
-    }
+    LinkedListElement* lastElementBeforeStart = rangeOfStart->elementBeforeStart;
+
     ListRange* rangeOfEnd = findBordersOfSequence(rangeOfStart->start, end);
 
     LinkedListElement* firstElementAfterEnd = rangeOfEnd->end->nextElement;
