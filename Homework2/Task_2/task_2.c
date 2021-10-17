@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     char* sequence = malloc(sizeof(char) * (sizeOfSequence + 1));
     fscanf(inputFile, "%s", sequence);
 
-    LinkedList* list = createLinkedList(sequence);
+    LinkedList* list = createLinkedListFromSequence(sequence);
     int amountOfCommands = 0;
     fscanf(inputFile, "%i", &amountOfCommands);
 
@@ -40,12 +40,25 @@ int main(int argc, char* argv[])
         char argument1[8], argument2[128], argument3[128];
         fscanf(inputFile, "%s %s %s", argument1, argument2, argument3);
 
-        if (strcmp(argument1, "DELETE") == 0)
-            delete(list, argument2, argument3);
-        else if (strcmp(argument1, "INSERT") == 0)
-            insert(list, argument2, argument3);
-        else if (strcmp(argument1, "REPLACE") == 0)
-            replace(list, argument2, argument3);
+        if (strcmp(argument1, "DELETE") == 0) {
+            if (!delete (list, argument2, argument3)) {
+                printf("couldn't find the sequence(");
+                return -1;
+            }
+        } else if (strcmp(argument1, "INSERT") == 0) {
+            if (!insert(list, argument2, argument3)) {
+                printf("couldn't find the sequence(");
+                return -1;
+            }
+        } else if (strcmp(argument1, "REPLACE") == 0) {
+            if (!replace(list, argument2, argument3)) {
+                printf("couldn't find the sequence(");
+                return -1;
+            }
+        } else {
+            printf("something is wrong with command");
+            return -1;
+        }
 
         printList(outputFile, list);
         fprintf(outputFile, "\n");
