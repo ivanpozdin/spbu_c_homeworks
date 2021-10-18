@@ -1,7 +1,5 @@
 #include "dna_editor.h"
 
-void freePartOfList(LinkedListElement* start, LinkedListElement* end);
-
 struct LinkedList {
     LinkedListElement* head;
     LinkedListElement* tail;
@@ -38,6 +36,20 @@ LinkedList* createLinkedListFromSequence(const char* sequence)
     return list;
 }
 
+void freePartOfList(LinkedListElement* start, LinkedListElement* end)
+{
+    for (LinkedListElement *current = start, *next = NULL; current != end; current = next) {
+        next = current->nextElement;
+        free(current);
+    }
+}
+
+void freeList(LinkedList* list)
+{
+    freePartOfList(list->head, NULL);
+    free(list);
+}
+
 ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* sequence)
 {
     ListRange* range = malloc(sizeof(ListRange));
@@ -64,7 +76,7 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
     return range;
 }
 
-bool delete (LinkedList* list, const char* start, const char* end)
+bool deletePartOfList(LinkedList* list, const char* start, const char* end)
 {
     ListRange* rangeOfStart = findBordersOfSequence(list->head, start);
     ListRange* rangeOfEnd = findBordersOfSequence(rangeOfStart->end->nextElement, end);
@@ -118,20 +130,6 @@ bool replace(LinkedList* list, const char* template, const char* fragment)
     freePartOfList(rangeOfTemplate->start, rangeOfTemplate->end);
     free(rangeOfTemplate);
     return true;
-}
-
-void freePartOfList(LinkedListElement* start, LinkedListElement* end)
-{
-    for (LinkedListElement *current = start, *next = NULL; current != end; current = next) {
-        next = current->nextElement;
-        free(current);
-    }
-}
-
-void freeList(LinkedList* list)
-{
-    freePartOfList(list->head, NULL);
-    free(list);
 }
 
 void printList(FILE* outputFile, LinkedList* list)
