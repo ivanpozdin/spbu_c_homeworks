@@ -1,20 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void mergeArrays(int* left, int sizeOfLeft, int* right, int sizeOfRight)
+void mergeArrays(int* leftPart, int sizeOfLeft, const int* rightPart, int sizeOfRight)
 {
-    int* arrayToReturn = calloc(sizeof(int), sizeOfLeft + sizeOfRight);
-    int leftIdx = 0, rightIdx = 0, arrayToReturnIdx = 0;
+    int* tmpArray = calloc(sizeof(int), sizeOfLeft + sizeOfRight);
+    int leftIdx = 0, rightIdx = 0, tmpArrayIdx = 0;
 
     while (leftIdx < sizeOfLeft || rightIdx < sizeOfRight) {
-        if (leftIdx == sizeOfLeft || (rightIdx < sizeOfRight && left[leftIdx] > right[rightIdx]))
-            arrayToReturn[arrayToReturnIdx++] = right[rightIdx++];
+        if (leftIdx == sizeOfLeft || (rightIdx < sizeOfRight && leftPart[leftIdx] > rightPart[rightIdx]))
+            tmpArray[tmpArrayIdx++] = rightPart[rightIdx++];
         else
-            arrayToReturn[arrayToReturnIdx++] = left[leftIdx++];
+            tmpArray[tmpArrayIdx++] = leftPart[leftIdx++];
     }
+    int* wholeArray = leftPart;
     for (int i = 0; i < sizeOfLeft + sizeOfRight; i++)
-        left[i] = arrayToReturn[i];
-    free(arrayToReturn);
+        wholeArray[i] = tmpArray[i];
+    free(tmpArray);
 }
 
 void mergeSort(int* array, int sizeOfArray)
