@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 
 typedef unsigned long long int uint64_t;
@@ -12,14 +13,10 @@ int main()
     printf("Enter a number: ");
     scanf("%lf", &number.realNumber);
     uint64_t unsignedIntegerFormOfDouble = number.unsignedIntegerFormOfDouble;
-    short int binaryFormOfRealNumber[64];
+    bool binaryFormOfRealNumber[64];
 
     for (int i = 0; i <= 63; i++) {
-        if (unsignedIntegerFormOfDouble & 1)
-            binaryFormOfRealNumber[i] = 1;
-        else
-            binaryFormOfRealNumber[i] = 0;
-
+        binaryFormOfRealNumber[i] = unsignedIntegerFormOfDouble & 1;
         unsignedIntegerFormOfDouble >>= 1;
     }
 
@@ -34,7 +31,7 @@ int main()
 
     printf("Result: ");
     binaryFormOfRealNumber[63] == 0 ? printf("+") : printf("-");
-    printf("%*.*lf", 20, 19, mantissa);
-    printf("*2^%i", exponent);
+    printf("%*.*lf*2^%i", 20, 19, mantissa, exponent);
+
     return 0;
 }
