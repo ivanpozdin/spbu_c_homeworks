@@ -56,10 +56,10 @@ ListRange* findBordersOfSequence(LinkedListElement* startOfSearch, const char* s
     range->start = NULL;
     range->end = NULL;
     range->elementBeforeStart = NULL;
+    int sequenceLength = (int)strlen(sequence);
 
     for (LinkedListElement* start = startOfSearch; start; start = start->nextElement) {
         int lengthOfProcessedSequence = 0;
-        int sequenceLength = strlen(sequence);
         for (LinkedListElement* end = start; end; end = end->nextElement) {
             if (end->letter != sequence[lengthOfProcessedSequence])
                 break;
@@ -83,6 +83,9 @@ bool deletePartOfList(LinkedList* list, const char* start, const char* end)
 
     if (!rangeOfStart->start || !rangeOfEnd->start)
         return false;
+
+    if (rangeOfStart->start == list->head)
+        list->head = rangeOfEnd->end->nextElement;
 
     if (!rangeOfEnd->end->nextElement)
         list->tail = rangeOfStart->elementBeforeStart;
@@ -120,6 +123,9 @@ bool replace(LinkedList* list, const char* template, const char* fragment)
 
     if (!rangeOfTemplate->start)
         return false;
+
+    if (rangeOfTemplate->start == list->head)
+        list->head = fragmentList->head;
 
     if (!rangeOfTemplate->end->nextElement)
         list->tail = fragmentList->tail;
