@@ -24,7 +24,7 @@ LinkedList* createLinkedListFromSequence(const char* sequence)
     previousElement->nextElement = NULL;
     list->head = previousElement;
     list->tail = NULL;
-    int sequenceLength = strlen(sequence);
+    int sequenceLength = (int)strlen(sequence);
     for (int i = 1; i < sequenceLength; i++) {
         LinkedListElement* newElement = malloc(sizeof(LinkedListElement));
         newElement->nextElement = NULL;
