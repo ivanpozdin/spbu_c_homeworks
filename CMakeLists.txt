@@ -16,3 +16,4 @@ target_link_libraries(task_2.1 library)
 
 add_executable(task_3.1 Homework3/task_1.c)
 add_executable(task_3.2 Homework3/task_2.c)
+add_executable(task_3.3 Homework3/task_3.c)
