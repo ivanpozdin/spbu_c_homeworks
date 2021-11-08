@@ -84,13 +84,13 @@ bool deletePartOfList(LinkedList* list, const char* start, const char* end)
     if (!rangeOfStart->start || !rangeOfEnd->start)
         return false;
 
-    if (rangeOfStart->start == list->head)
-        list->head = rangeOfEnd->end->nextElement;
-
-    if (!rangeOfEnd->end->nextElement)
+    if (rangeOfEnd->end == list->tail)
         list->tail = rangeOfStart->elementBeforeStart;
 
-    rangeOfStart->elementBeforeStart->nextElement = rangeOfEnd->end->nextElement;
+    if (rangeOfStart->start == list->head)
+        list->head = rangeOfEnd->end->nextElement;
+    else
+        rangeOfStart->elementBeforeStart->nextElement = rangeOfEnd->end->nextElement;
 
     freePartOfList(rangeOfStart->start, rangeOfEnd->end);
     free(rangeOfStart);
@@ -124,13 +124,13 @@ bool replace(LinkedList* list, const char* template, const char* fragment)
     if (!rangeOfTemplate->start)
         return false;
 
-    if (rangeOfTemplate->start == list->head)
-        list->head = fragmentList->head;
-
-    if (!rangeOfTemplate->end->nextElement)
+    if (rangeOfTemplate->end == list->tail)
         list->tail = fragmentList->tail;
 
-    rangeOfTemplate->elementBeforeStart->nextElement = fragmentList->head;
+    if (rangeOfTemplate->start == list->head)
+        list->head = fragmentList->head;
+    else
+        rangeOfTemplate->elementBeforeStart->nextElement = fragmentList->head;
     fragmentList->tail->nextElement = rangeOfTemplate->end->nextElement;
 
     freePartOfList(rangeOfTemplate->start, rangeOfTemplate->end);
