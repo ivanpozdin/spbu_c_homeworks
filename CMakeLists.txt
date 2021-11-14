@@ -3,7 +3,10 @@ project(spbu_c_homeworks C)
 
 set(CMAKE_C_STANDARD 11)
 set(SOURCE_LIB
-    library/commonUtils/numericOperations.c Homework2/Task_1/linked_map.c)
+    library/commonUtils/numericOperations.c
+        Homework2/Task_1/linked_map.c
+        Homework5/TreeMap.c Homework5/TreeMap.h
+        library/values/values.c library/values/values.h)
 add_library(library ${SOURCE_LIB})
 
 add_executable(task_1.1 Homework1/task1.c)
@@ -17,3 +20,6 @@ target_link_libraries(task_2.1 library)
 add_executable(task_3.1 Homework3/task_1.c)
 add_executable(task_3.2 Homework3/task_2.c)
 add_executable(task_3.3 Homework3/task_3.c)
+add_executable(task_5.1 Homework5/task_1.c)
+target_link_libraries(task_5.1 library)
+include_directories(library)
