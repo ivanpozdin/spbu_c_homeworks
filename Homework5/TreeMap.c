@@ -3,8 +3,8 @@
 #include <stdlib.h>
 
 typedef struct Node {
-    int value;
-    int key;
+    Value value;
+    Value key;
     struct Node* leftChild;
     struct Node* rightChild;
     int height;
@@ -14,7 +14,11 @@ struct TreeMap {
     Node* root;
 };
 
-Node* createNode(int key, int value)
+struct TreeMapIterator {
+    Node* node;
+};
+
+Node* createNode(Value key, Value value)
 {
     Node* node = malloc(sizeof(Node));
     node->value = value;
@@ -85,31 +89,31 @@ Node* balance(Node* root)
     return root;
 }
 
-Node* find(Node* root, int key)
+Node* find(Node* root, Value key)
 {
     if (!root)
         return NULL;
-    if (root->key > key)
+    if (compare(root->key, key) > 0)
         return find(root->leftChild, key);
-    else if (root->key < key)
+    else if (compare(root->key, key) < 0)
         return find(root->rightChild, key);
     return root;
 }
 
-Node* insertWithoutBalance(Node* root, int key, int value)
+Node* insertWithoutBalance(Node* root, Value key, Value value)
 {
     if (!root)
         return createNode(key, value);
-    if (root->key > key)
+    if (compare(root->key, key) > 0)
         root->leftChild = insertWithoutBalance(root->leftChild, key, value);
-    else if (root->key < key)
+    else if (compare(root->key, key) < 0)
         root->rightChild = insertWithoutBalance(root->rightChild, key, value);
-    else if (root->key == key)
+    else if (compare(root->key, key) == 0)
         root->value = value;
     return root;
 }
 
-void put(TreeMap* tree, int key, int value)
+void put(TreeMap* tree, Value key, Value value)
 {
     if (!tree->root)
         tree->root = insertWithoutBalance(tree->root, key, value);
@@ -118,13 +122,13 @@ void put(TreeMap* tree, int key, int value)
     tree->root = balance(tree->root);
 }
 
-bool hasKey(TreeMap* map, int key)
+bool hasKey(TreeMap* map, Value key)
 {
     Node* node = map->root;
     while (node) {
-        if (key > node->key)
+        if (compare(key, node->key) < 0)
             node = node->rightChild;
-        else if (node->key < key)
+        else if (compare(key, node->key) > 0)
             node = node->leftChild;
         else
             return true;
@@ -146,61 +150,67 @@ Node* getMinimum(Node* node)
     return node;
 }
 
-int getLowerBound(TreeMap* map, int key, bool* thereIsSuchKey)
+Value getLowerBound(TreeMap* map, Value key, bool* thereIsSuchKey)
 {
-    if (!map->root){
+    if (!map->root) {
         thereIsSuchKey = false;
-        return 0;
+        return key;
     }
     *thereIsSuchKey = true;
     Node* node = map->root;
-    int lowerBound = getMaximum(map->root)->key;
+    Value lowerBound = getMaximum(map->root)->key;
     while (node) {
-        if (node->key >= key) {
+        if (compare(node->key, key) >= 0) {
             lowerBound = node->key;
             if (!node->leftChild)
                 return node->key;
             node = node->leftChild;
         } else {
             if (!node->rightChild) {
-                if (lowerBound < key)
+                if (compare(lowerBound, key) < 0)
                     *thereIsSuchKey = false;
                 return lowerBound;
             }
             node = node->rightChild;
         }
     }
-    thereIsSuchKey = false;
-    return 0;
 }
 
-int getUpperBound(TreeMap* map, int key, bool* thereIsSuchKey)
+Value getUpperBound(TreeMap* map, Value key, bool* thereIsSuchKey)
 {
-    if (!map->root){
+    if (!map->root) {
         thereIsSuchKey = false;
-        return 0;
+        return key;
     }
     *thereIsSuchKey = true;
     Node* node = map->root;
-    int lowerBound = getMaximum(map->root)->key;
+    Value lowerBound = getMaximum(map->root)->key;
     while (node) {
-        if (node->key > key) {
+        if (compare(node->key, key) > 0) {
             lowerBound = node->key;
             if (!node->leftChild)
                 return node->key;
             node = node->leftChild;
         } else {
             if (!node->rightChild) {
-                if (lowerBound <= key)
+                if (compare(lowerBound, key) <= 0)
                     *thereIsSuchKey = false;
                 return lowerBound;
             }
             node = node->rightChild;
         }
     }
-    thereIsSuchKey = false;
-    return 0;
 }
+
+Value getKey(TreeMapIterator* iterator)
+{
+    return iterator->node->key;
+}
+
+Value getValue(TreeMapIterator* iterator)
+{
+    return iterator->node->value;
+};
 
 void freeNode(Node* node)
 {
@@ -216,22 +226,4 @@ void deleteTreeMap(TreeMap* tree)
     if (tree->root)
         freeNode(tree->root);
     free(tree);
-}
-
-void prettyNodePrint(Node* node, int indent, char indentSymbol, int indentStep)
-{
-    for (int i = 0; i < indentStep * indent; i++)
-        printf("%c", indentSymbol);
-    printf("(%d): %d\n", node->key, node->value);
-    if (node->leftChild)
-        prettyNodePrint(node->leftChild, indent + 1, indentSymbol, indentStep);
-    if (node->rightChild)
-        prettyNodePrint(node->rightChild, indent + 1, indentSymbol, indentStep);
-}
-
-void prettyPrint(TreeMap* tree, char indentSymbol, int indentStep)
-{
-    if (tree->root) {
-        prettyNodePrint(tree->root, 0, indentSymbol, indentStep);
-    }
 }
