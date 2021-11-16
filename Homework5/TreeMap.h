@@ -8,19 +8,26 @@
 typedef struct TreeMap TreeMap;
 typedef struct TreeMapIterator TreeMapIterator;
 
+typedef struct MapEntry{
+    Value key;
+    Value value;
+} MapEntry;
+
 TreeMap* createTreeMap();
 
 void put(TreeMap* tree, Value key, Value value);
 
 bool hasKey(TreeMap* map, Value key);
 
-Value getLowerBound(TreeMap* map, Value key, bool* thereIsSuchKey);
+Value getLowerBound(TreeMap* map, Value key);
 
-Value getUpperBound(TreeMap* map, Value key, bool* thereIsSuchKey);
+Value getUpperBound(TreeMap* map, Value key);
 
 Value getKey(TreeMapIterator* iterator);
 
 Value getValue(TreeMapIterator* iterator);
+
+MapEntry removeKey(TreeMap* map, Value key);
 
 void deleteTreeMap(TreeMap* tree);
 

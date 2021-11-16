@@ -18,6 +18,8 @@ struct TreeMapIterator {
     Node* node;
 };
 
+void deleteNode(TreeMap* map, Node* node);
+
 Node* createNode(Value key, Value value)
 {
     Node* node = malloc(sizeof(Node));
@@ -100,6 +102,19 @@ Node* find(Node* root, Value key)
     return root;
 }
 
+Node* findParent(Node* root, Value key)
+{
+    if (!root)
+        return NULL;
+    if (compare(root->leftChild->key, key) == 0 || compare(root->rightChild->key, key) == 0)
+        return root;
+    if (compare(root->key, key) > 0)
+        return find(root->leftChild, key);
+    else if (compare(root->key, key) < 0)
+        return find(root->rightChild, key);
+    return root;
+}
+
 Node* insertWithoutBalance(Node* root, Value key, Value value)
 {
     if (!root)
@@ -150,13 +165,11 @@ Node* getMinimum(Node* node)
     return node;
 }
 
-Value getLowerBound(TreeMap* map, Value key, bool* thereIsSuchKey)
+Value getLowerBound(TreeMap* map, Value key)
 {
-    if (!map->root) {
-        thereIsSuchKey = false;
-        return key;
-    }
-    *thereIsSuchKey = true;
+    if (!map->root)
+        return wrapNone();
+
     Node* node = map->root;
     Value lowerBound = getMaximum(map->root)->key;
     while (node) {
@@ -168,7 +181,7 @@ Value getLowerBound(TreeMap* map, Value key, bool* thereIsSuchKey)
         } else {
             if (!node->rightChild) {
                 if (compare(lowerBound, key) < 0)
-                    *thereIsSuchKey = false;
+                    return wrapNone();
                 return lowerBound;
             }
             node = node->rightChild;
@@ -176,13 +189,11 @@ Value getLowerBound(TreeMap* map, Value key, bool* thereIsSuchKey)
     }
 }
 
-Value getUpperBound(TreeMap* map, Value key, bool* thereIsSuchKey)
+Value getUpperBound(TreeMap* map, Value key)
 {
-    if (!map->root) {
-        thereIsSuchKey = false;
-        return key;
-    }
-    *thereIsSuchKey = true;
+    if (!map->root)
+        return wrapNone();
+
     Node* node = map->root;
     Value lowerBound = getMaximum(map->root)->key;
     while (node) {
@@ -194,7 +205,7 @@ Value getUpperBound(TreeMap* map, Value key, bool* thereIsSuchKey)
         } else {
             if (!node->rightChild) {
                 if (compare(lowerBound, key) <= 0)
-                    *thereIsSuchKey = false;
+                    return wrapNone();
                 return lowerBound;
             }
             node = node->rightChild;
@@ -210,20 +221,65 @@ Value getKey(TreeMapIterator* iterator)
 Value getValue(TreeMapIterator* iterator)
 {
     return iterator->node->value;
-};
+}
 
-void freeNode(Node* node)
+void deleteNode(TreeMap* map, Node* node)
+{
+    Node* parent = findParent(map->root, node->key);
+    if (!node->rightChild && !node->leftChild) {
+        if (parent) {
+            if (compare(parent->key, node->key) > 0)
+                parent->leftChild = NULL;
+            else
+                parent->rightChild = NULL;
+        } else
+            map->root = NULL;
+        free(node);
+    } else if (!node->leftChild ^ !node->rightChild) {
+        if (parent) {
+            if (compare(parent->key, node->key) > 0)
+                parent->leftChild = node->leftChild ? node->leftChild : node->rightChild;
+            else
+                parent->rightChild = node->leftChild ? node->leftChild : node->rightChild;
+        } else {
+            map->root = node->leftChild ? node->leftChild : node->rightChild;
+            free(node);
+        }
+    } else {
+        Node* minNodeInRightSubTree = getMinimum(node->rightChild);
+        Node* parentOfMinNodeInRightSubTree = findParent(node->rightChild, minNodeInRightSubTree->key);
+        if (compare(parentOfMinNodeInRightSubTree->key, minNodeInRightSubTree->key) > 0)
+            parentOfMinNodeInRightSubTree->leftChild = NULL;
+        else
+            parentOfMinNodeInRightSubTree->rightChild = NULL;
+        node->key = minNodeInRightSubTree->key;
+        node->value = minNodeInRightSubTree->value;
+        free(minNodeInRightSubTree);
+    }
+    updateHeight(map->root);
+}
+
+MapEntry removeKey(TreeMap* map, Value key)
+{
+    Node* node = find(map->root, key);
+    if (!node)
+        return (MapEntry) { wrapNone(), wrapNone() };
+    Value value = node->value;
+    deleteNode(map, node);
+}
+
+void freeSubTree(Node* node)
 {
     if (node->leftChild)
-        freeNode(node->leftChild);
+        freeSubTree(node->leftChild);
     if (node->rightChild)
-        freeNode(node->rightChild);
+        freeSubTree(node->rightChild);
     free(node);
 }
 
 void deleteTreeMap(TreeMap* tree)
 {
     if (tree->root)
-        freeNode(tree->root);
+        freeSubTree(tree->root);
     free(tree);
 }
