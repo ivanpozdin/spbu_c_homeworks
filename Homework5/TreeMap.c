@@ -112,7 +112,7 @@ Node* findParent(Node* root, Value key)
         return find(root->leftChild, key);
     else if (compare(root->key, key) < 0)
         return find(root->rightChild, key);
-    return root;
+    return NULL;
 }
 
 Node* insertWithoutBalance(Node* root, Value key, Value value)
@@ -141,9 +141,9 @@ bool hasKey(TreeMap* map, Value key)
 {
     Node* node = map->root;
     while (node) {
-        if (compare(key, node->key) < 0)
+        if (compare(key, node->key) > 0)
             node = node->rightChild;
-        else if (compare(key, node->key) > 0)
+        else if (compare(key, node->key) < 0)
             node = node->leftChild;
         else
             return true;
@@ -241,10 +241,11 @@ void deleteNode(TreeMap* map, Node* node)
                 parent->leftChild = node->leftChild ? node->leftChild : node->rightChild;
             else
                 parent->rightChild = node->leftChild ? node->leftChild : node->rightChild;
-        } else {
+        } else
             map->root = node->leftChild ? node->leftChild : node->rightChild;
-            free(node);
-        }
+
+        free(node);
+
     } else {
         Node* minNodeInRightSubTree = getMinimum(node->rightChild);
         Node* parentOfMinNodeInRightSubTree = findParent(node->rightChild, minNodeInRightSubTree->key);
@@ -256,7 +257,35 @@ void deleteNode(TreeMap* map, Node* node)
         node->value = minNodeInRightSubTree->value;
         free(minNodeInRightSubTree);
     }
+    balance(map->root);
     updateHeight(map->root);
+}
+
+Node* deleteNodeWithoutBalance(Node* root, Value key){
+        if (!root)
+            return NULL;
+        if (compare(root->key, key) > 0) {
+            root->leftChild = deleteNodeWithoutBalance(root->leftChild, key);
+            return root;
+        } else if (compare(root->key, key) < 0) {
+            root->rightChild = deleteNodeWithoutBalance(root->rightChild, key);
+            return root;
+        }
+        Node* newRoot = NULL;
+        if (!root->leftChild)
+            newRoot = root->rightChild;
+        else if (!root->rightChild)
+            newRoot = root->leftChild;
+        else {
+            Pair pair = extractMax(root->leftChild);
+            newRoot = pair.first;
+            newRoot->leftChild = pair.second;
+            newRoot->rightChild = root->rightChild;
+        }
+        free(root);
+        return newRoot;
+
+
 }
 
 MapEntry removeKey(TreeMap* map, Value key)
@@ -264,8 +293,9 @@ MapEntry removeKey(TreeMap* map, Value key)
     Node* node = find(map->root, key);
     if (!node)
         return (MapEntry) { wrapNone(), wrapNone() };
-    Value value = node->value;
-    deleteNode(map, node);
+    MapEntry mapEntry = (MapEntry) {node->key, node->value};
+    //deleteNode(map, node);
+    return mapEntry;
 }
 
 void freeSubTree(Node* node)
