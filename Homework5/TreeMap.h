@@ -19,6 +19,8 @@ void put(TreeMap* tree, Value key, Value value);
 
 bool hasKey(TreeMap* map, Value key);
 
+Value get(TreeMap* map, Value key);
+
 Value getLowerBound(TreeMap* map, Value key);
 
 Value getUpperBound(TreeMap* map, Value key);

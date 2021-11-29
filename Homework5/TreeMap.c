@@ -102,19 +102,6 @@ Node* find(Node* root, Value key)
     return root;
 }
 
-Node* findParent(Node* root, Value key)
-{
-    if (!root)
-        return NULL;
-    if (compare(root->leftChild->key, key) == 0 || compare(root->rightChild->key, key) == 0)
-        return root;
-    if (compare(root->key, key) > 0)
-        return find(root->leftChild, key);
-    else if (compare(root->key, key) < 0)
-        return find(root->rightChild, key);
-    return NULL;
-}
-
 Node* insertWithoutBalance(Node* root, Value key, Value value)
 {
     if (!root)
@@ -149,6 +136,13 @@ bool hasKey(TreeMap* map, Value key)
             return true;
     }
     return false;
+}
+
+Value get(TreeMap* map, Value key){
+    Node* node = find(map->root, key);
+    if (node)
+        return node->value;
+    return wrapNone();
 }
 
 Node* getMaximum(Node* node)
@@ -187,6 +181,7 @@ Value getLowerBound(TreeMap* map, Value key)
             node = node->rightChild;
         }
     }
+    return wrapNone();
 }
 
 Value getUpperBound(TreeMap* map, Value key)
@@ -211,6 +206,7 @@ Value getUpperBound(TreeMap* map, Value key)
             node = node->rightChild;
         }
     }
+    return wrapNone();
 }
 
 Value getKey(TreeMapIterator* iterator)
@@ -223,69 +219,59 @@ Value getValue(TreeMapIterator* iterator)
     return iterator->node->value;
 }
 
-void deleteNode(TreeMap* map, Node* node)
+typedef struct Pair {
+    Node* first;
+    Node* second;
+} Pair;
+
+Pair makePair(Node* first, Node* second)
 {
-    Node* parent = findParent(map->root, node->key);
-    if (!node->rightChild && !node->leftChild) {
-        if (parent) {
-            if (compare(parent->key, node->key) > 0)
-                parent->leftChild = NULL;
-            else
-                parent->rightChild = NULL;
-        } else
-            map->root = NULL;
-        free(node);
-    } else if (!node->leftChild ^ !node->rightChild) {
-        if (parent) {
-            if (compare(parent->key, node->key) > 0)
-                parent->leftChild = node->leftChild ? node->leftChild : node->rightChild;
-            else
-                parent->rightChild = node->leftChild ? node->leftChild : node->rightChild;
-        } else
-            map->root = node->leftChild ? node->leftChild : node->rightChild;
-
-        free(node);
-
-    } else {
-        Node* minNodeInRightSubTree = getMinimum(node->rightChild);
-        Node* parentOfMinNodeInRightSubTree = findParent(node->rightChild, minNodeInRightSubTree->key);
-        if (compare(parentOfMinNodeInRightSubTree->key, minNodeInRightSubTree->key) > 0)
-            parentOfMinNodeInRightSubTree->leftChild = NULL;
-        else
-            parentOfMinNodeInRightSubTree->rightChild = NULL;
-        node->key = minNodeInRightSubTree->key;
-        node->value = minNodeInRightSubTree->value;
-        free(minNodeInRightSubTree);
-    }
-    balance(map->root);
-    updateHeight(map->root);
+    return (Pair) { first, second };
 }
 
-Node* deleteNodeWithoutBalance(Node* root, Value key){
-        if (!root)
-            return NULL;
-        if (compare(root->key, key) > 0) {
-            root->leftChild = deleteNodeWithoutBalance(root->leftChild, key);
-            return root;
-        } else if (compare(root->key, key) < 0) {
-            root->rightChild = deleteNodeWithoutBalance(root->rightChild, key);
-            return root;
-        }
-        Node* newRoot = NULL;
-        if (!root->leftChild)
-            newRoot = root->rightChild;
-        else if (!root->rightChild)
-            newRoot = root->leftChild;
-        else {
-            Pair pair = extractMax(root->leftChild);
-            newRoot = pair.first;
-            newRoot->leftChild = pair.second;
-            newRoot->rightChild = root->rightChild;
-        }
-        free(root);
-        return newRoot;
+// Возвращает пару из вершины с максимальным ключом и
+// корня дерева поиска после удаления этой вершины
+Pair extractMax(Node* root)
+{
+    if (root->rightChild) {
+        Pair pair = extractMax(root->rightChild);
+        root->rightChild = pair.second;
+        return makePair(pair.first, root);
+    }
+    return makePair(root, root->leftChild);
+}
 
+Node* deleteNodeWithoutBalance(Node* root, Value key)
+{
+    if (!root)
+        return NULL;
+    if (compare(root->key, key) > 0) {
+        root->leftChild = deleteNodeWithoutBalance(root->leftChild, key);
+        return root;
+    } else if (compare(root->key, key) < 0) {
+        root->rightChild = deleteNodeWithoutBalance(root->rightChild, key);
+        return root;
+    }
+    Node* newRoot = NULL;
+    if (!root->leftChild)
+        newRoot = root->rightChild;
+    else if (!root->rightChild)
+        newRoot = root->leftChild;
+    else {
+        Pair pair = extractMax(root->leftChild);
+        newRoot = pair.first;
+        newRoot->leftChild = pair.second;
+        newRoot->rightChild = root->rightChild;
+    }
+    free(root);
+    return newRoot;
+}
 
+void deleteNode(TreeMap* map, Node* node)
+{
+    Node* newRoot = deleteNodeWithoutBalance(map->root, node->key);
+    updateHeight(map->root);
+    balance(newRoot);
 }
 
 MapEntry removeKey(TreeMap* map, Value key)
@@ -293,8 +279,8 @@ MapEntry removeKey(TreeMap* map, Value key)
     Node* node = find(map->root, key);
     if (!node)
         return (MapEntry) { wrapNone(), wrapNone() };
-    MapEntry mapEntry = (MapEntry) {node->key, node->value};
-    //deleteNode(map, node);
+    MapEntry mapEntry = (MapEntry) { node->key, node->value };
+    deleteNode(map, node);
     return mapEntry;
 }
 
