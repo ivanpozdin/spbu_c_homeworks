@@ -17,19 +17,29 @@ TreeMap* createTreeMap();
 
 void put(TreeMap* tree, Value key, Value value);
 
-bool hasKey(TreeMap* map, Value key);
+MapEntry removeKey(TreeMap* map, Value key);
 
 Value get(TreeMap* map, Value key);
+
+bool hasKey(TreeMap* map, Value key);
+
+
 
 Value getLowerBound(TreeMap* map, Value key);
 
 Value getUpperBound(TreeMap* map, Value key);
 
+Value getMaximum(TreeMap* map);
+
+Value getMinimum(TreeMap* map);
+
+TreeMapIterator* getIterator(TreeMap* map);
 Value getKey(TreeMapIterator* iterator);
-
 Value getValue(TreeMapIterator* iterator);
+void next(TreeMapIterator* iterator, bool leftChildIsNotUsed);
+bool hasElement(TreeMapIterator* iterator);
 
-MapEntry removeKey(TreeMap* map, Value key);
+
 
 void deleteTreeMap(TreeMap* tree);
 

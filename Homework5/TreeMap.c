@@ -16,6 +16,7 @@ struct TreeMap {
 
 struct TreeMapIterator {
     Node* node;
+    TreeMap* map;
 };
 
 void deleteNode(TreeMap* map, Node* node);
@@ -138,21 +139,22 @@ bool hasKey(TreeMap* map, Value key)
     return false;
 }
 
-Value get(TreeMap* map, Value key){
+Value get(TreeMap* map, Value key)
+{
     Node* node = find(map->root, key);
     if (node)
         return node->value;
     return wrapNone();
 }
 
-Node* getMaximum(Node* node)
+Node* getNodeWithMaxKey(Node* node)
 {
     while (node->rightChild)
         node = node->rightChild;
     return node;
 }
 
-Node* getMinimum(Node* node)
+Node* getNodeWithMinKey(Node* node)
 {
     while (node->leftChild)
         node = node->leftChild;
@@ -165,7 +167,7 @@ Value getLowerBound(TreeMap* map, Value key)
         return wrapNone();
 
     Node* node = map->root;
-    Value lowerBound = getMaximum(map->root)->key;
+    Value lowerBound = getNodeWithMaxKey(map->root)->key;
     while (node) {
         if (compare(node->key, key) >= 0) {
             lowerBound = node->key;
@@ -190,7 +192,7 @@ Value getUpperBound(TreeMap* map, Value key)
         return wrapNone();
 
     Node* node = map->root;
-    Value lowerBound = getMaximum(map->root)->key;
+    Value lowerBound = getNodeWithMaxKey(map->root)->key;
     while (node) {
         if (compare(node->key, key) > 0) {
             lowerBound = node->key;
@@ -209,6 +211,24 @@ Value getUpperBound(TreeMap* map, Value key)
     return wrapNone();
 }
 
+Value getMaximum(TreeMap* map)
+{
+    return getNodeWithMaxKey(map->root)->key;
+}
+
+Value getMinimum(TreeMap* map)
+{
+    return getNodeWithMinKey(map->root)->key;
+}
+
+TreeMapIterator* getIterator(TreeMap* map)
+{
+    TreeMapIterator* iterator = malloc(sizeof(TreeMapIterator));
+    iterator->node = map->root;
+    iterator->map = map;
+    return iterator;
+}
+
 Value getKey(TreeMapIterator* iterator)
 {
     return iterator->node->key;
@@ -217,6 +237,44 @@ Value getKey(TreeMapIterator* iterator)
 Value getValue(TreeMapIterator* iterator)
 {
     return iterator->node->value;
+}
+
+Node* findParent(Node* root, Value key)
+{
+    if (!root)
+        return NULL;
+    if (compare(root->leftChild->key, key) == 0 || compare(root->rightChild->key, key) == 0)
+        return root;
+    if (compare(root->key, key) > 0)
+        return findParent(root->leftChild, key);
+    else if (compare(root->key, key) < 0)
+        return findParent(root->rightChild, key);
+    return NULL;
+}
+
+bool hasElement(TreeMapIterator* iterator)
+{
+    return iterator->node != NULL;
+}
+
+void next(TreeMapIterator* iterator, bool leftChildIsNotUsed)
+{
+    if (iterator->node == getNodeWithMaxKey(iterator->map->root)) {
+        iterator->node = false;
+        return;
+    }
+
+    if (iterator->node->leftChild && leftChildIsNotUsed) {
+        iterator->node = iterator->node->leftChild;
+        return;
+    }
+    if (iterator->node->rightChild && (!leftChildIsNotUsed && iterator->node->leftChild || leftChildIsNotUsed)) {
+        iterator->node = iterator->node->rightChild;
+        return;
+    }
+
+    iterator->node = findParent(iterator->map->root, iterator->node->key);
+    next(iterator, false);
 }
 
 typedef struct Pair {
