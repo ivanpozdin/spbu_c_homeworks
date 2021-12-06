@@ -149,41 +149,39 @@ Value get(TreeMap* map, Value key)
 
 Node* getNodeWithMaxKey(Node* node)
 {
-    while (node->rightChild)
+    while (node && node->rightChild)
         node = node->rightChild;
     return node;
 }
 
 Node* getNodeWithMinKey(Node* node)
 {
-    while (node->leftChild)
+    while (node && node->leftChild)
         node = node->leftChild;
     return node;
 }
 
 Value getLowerBound(TreeMap* map, Value key)
 {
-    if (!map->root)
+    if (map->root == NULL)
         return wrapNone();
 
     Node* node = map->root;
-    Value lowerBound = getNodeWithMaxKey(map->root)->key;
+    Value lowerBound = getMaximum(map);
+    if (compare(lowerBound, key) < 0)
+        return wrapNone();
+    printf("%i\n", getInt(lowerBound));
     while (node) {
         if (compare(node->key, key) >= 0) {
             lowerBound = node->key;
-            if (!node->leftChild)
-                return node->key;
             node = node->leftChild;
         } else {
-            if (!node->rightChild) {
-                if (compare(lowerBound, key) < 0)
-                    return wrapNone();
-                return lowerBound;
-            }
+            if (!node->rightChild)
+                return wrapNone();
             node = node->rightChild;
         }
     }
-    return wrapNone();
+    return lowerBound;
 }
 
 Value getUpperBound(TreeMap* map, Value key)
@@ -213,12 +211,20 @@ Value getUpperBound(TreeMap* map, Value key)
 
 Value getMaximum(TreeMap* map)
 {
-    return getNodeWithMaxKey(map->root)->key;
+    Node* node = getNodeWithMaxKey(map->root);
+    if (node)
+        return node->key;
+    else
+        return wrapNone();
 }
 
 Value getMinimum(TreeMap* map)
 {
-    return getNodeWithMinKey(map->root)->key;
+    Node* node = getNodeWithMinKey(map->root);
+    if (node)
+        return node->key;
+    else
+        return wrapNone();
 }
 
 TreeMapIterator* getIterator(TreeMap* map)

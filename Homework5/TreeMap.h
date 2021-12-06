@@ -23,8 +23,6 @@ Value get(TreeMap* map, Value key);
 
 bool hasKey(TreeMap* map, Value key);
 
-
-
 Value getLowerBound(TreeMap* map, Value key);
 
 Value getUpperBound(TreeMap* map, Value key);
@@ -38,8 +36,6 @@ Value getKey(TreeMapIterator* iterator);
 Value getValue(TreeMapIterator* iterator);
 void next(TreeMapIterator* iterator, bool leftChildIsNotUsed);
 bool hasElement(TreeMapIterator* iterator);
-
-
 
 void deleteTreeMap(TreeMap* tree);
 
