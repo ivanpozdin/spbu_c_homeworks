@@ -49,6 +49,6 @@ int main()
     printf("Sorted array: ");
     for (int i = 0; i < amountOfElements; i++)
         printf("%i ", array[i]);
-
+    free(array);
     return 0;
 }
