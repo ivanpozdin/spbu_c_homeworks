@@ -119,13 +119,13 @@ Node* insertWithoutBalance(Node* root, Value key, Value value)
     return root;
 }
 
-void put(TreeMap* tree, Value key, Value value)
+void put(TreeMap* map, Value key, Value value)
 {
-    if (!tree->root)
-        tree->root = insertWithoutBalance(tree->root, key, value);
+    if (!map->root)
+        map->root = insertWithoutBalance(map->root, key, value);
     else
-        insertWithoutBalance(tree->root, key, value);
-    tree->root = balance(tree->root);
+        insertWithoutBalance(map->root, key, value);
+    map->root = balance(map->root);
 }
 
 bool hasKey(TreeMap* map, Value key)
@@ -358,11 +358,11 @@ void freeSubTree(Node* node)
     free(node);
 }
 
-void deleteTreeMap(TreeMap* tree)
+void deleteTreeMap(TreeMap* map)
 {
-    if (tree->root)
-        freeSubTree(tree->root);
-    free(tree);
+    if (map->root)
+        freeSubTree(map->root);
+    free(map);
 }
 
 void traverse(Node* root, int* idx, keyValuePair* array)

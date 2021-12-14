@@ -20,7 +20,7 @@ typedef struct keyValuePair{
 
 TreeMap* createTreeMap();
 
-void put(TreeMap* tree, Value key, Value value);
+void put(TreeMap* map, Value key, Value value);
 
 MapEntry removeKey(TreeMap* map, Value key);
 
@@ -44,5 +44,5 @@ bool hasElement(TreeMapIterator* iterator);
 
 keyValuePair* getKeysValuesArray(TreeMap* map, int* sizeOfArray);
 
-void deleteTreeMap(TreeMap* tree);
+void deleteTreeMap(TreeMap* map);
 #endif // SPBU_C_HOMEWORKS_HOMEWORK5_TREEMAP_H_
