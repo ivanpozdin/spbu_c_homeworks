@@ -367,16 +367,21 @@ void deleteTreeMap(TreeMap* tree)
     free(tree);
 }
 
-void traverse(Node* root)
+void traverse(Node* root, int* idx, keyValuePair* array)
 {
     if (root->leftChild)
-        traverse(root->leftChild);
-    printf("\n%d %d", getInt(root->key), getInt(root->value));
+        traverse(root->leftChild, idx, array);
+    array[*idx].key = root->key;
+    array[*idx].value = root->value;
+    *idx++;
     if (root->rightChild)
-        traverse(root->rightChild);
+        traverse(root->rightChild, idx, array);
 }
 
-void traverseMap(TreeMap* map)
-{
-    traverse(map->root);
+keyValuePair* getKeysValueInArray(TreeMap* map){
+    keyValuePair* array = malloc(sizeof(keyValuePair) * 1 << getHeight(map->root));
+    int idx = 0;
+    traverse(map->root, &idx, array);
+    return array;
 }
+

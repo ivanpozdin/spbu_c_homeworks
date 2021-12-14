@@ -73,7 +73,10 @@ int main(int argc, char* argv[])
             return -1;
         }
     }
-    traverseMap(map);
+    keyValuePair* array = getKeysValueInArray(map);
+    for (int i = 0; i < 124; i++){
+        printf("%i %i\n", getInt(array[i].key), getInt(array[i].value));
+    }
 
     deleteTreeMap(map);
 

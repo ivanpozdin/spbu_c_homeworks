@@ -13,6 +13,11 @@ typedef struct MapEntry {
     Value value;
 } MapEntry;
 
+typedef struct keyValuePair{
+    Value key;
+    Value value;
+}keyValuePair;
+
 TreeMap* createTreeMap();
 
 void put(TreeMap* tree, Value key, Value value);
@@ -36,6 +41,8 @@ Value getKey(TreeMapIterator* iterator);
 Value getValue(TreeMapIterator* iterator);
 void next(TreeMapIterator* iterator, bool leftChildIsNotUsed);
 bool hasElement(TreeMapIterator* iterator);
+
+keyValuePair* getKeysValueInArray(TreeMap* map);
 
 void deleteTreeMap(TreeMap* tree);
 void traverseMap(TreeMap* map);
