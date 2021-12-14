@@ -42,8 +42,7 @@ Value getValue(TreeMapIterator* iterator);
 void next(TreeMapIterator* iterator, bool leftChildIsNotUsed);
 bool hasElement(TreeMapIterator* iterator);
 
-keyValuePair* getKeysValueInArray(TreeMap* map);
+keyValuePair* getKeysValuesArray(TreeMap* map, int* sizeOfArray);
 
 void deleteTreeMap(TreeMap* tree);
-void traverseMap(TreeMap* map);
 #endif // SPBU_C_HOMEWORKS_HOMEWORK5_TREEMAP_H_

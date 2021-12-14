@@ -6,24 +6,28 @@
 int main(int argc, char* argv[])
 {
     char nameOfInputFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_logs.txt";
-    char nameOfOutputFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/out.txt";
+    char nameOfOutputResultsFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_results.txt";
+    char nameOfOutputBalanceFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_balance.txt";
     //        if (argc == 1) {
     //            //printf("Enter the name of the file whose contents you want to analyze:\n");
     //            scanf("%s", nameOfInputFile);
     //            //printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
-    //            scanf("%s", nameOfOutputFile);
+    //            scanf("%s", nameOfOutputResultsFile);
     //        } else {
     //            strcpy(nameOfInputFile, argv[1]);
-    //            strcpy(nameOfOutputFile, argv[2]);
+    //            strcpy(nameOfOutputResultsFile, argv[2]);
     //        }
     FILE* inputFile = fopen(nameOfInputFile, "r");
-    FILE* outputFile = fopen(nameOfOutputFile, "w");
+    FILE* outputResultsFile = fopen(nameOfOutputResultsFile, "w");
+    FILE* outputBalanceFile = fopen(nameOfOutputBalanceFile, "w");
 
-    if (!inputFile || !outputFile) {
+    if (!inputFile || !outputResultsFile || !outputBalanceFile) {
         if (inputFile)
             fclose(inputFile);
-        if (outputFile)
-            fclose(outputFile);
+        if (outputResultsFile)
+            fclose(outputResultsFile);
+        if (outputBalanceFile)
+            fclose(outputBalanceFile);
 
         printf("There is something wrong with the files");
         return -1;
@@ -49,18 +53,18 @@ int main(int argc, char* argv[])
             fscanf(inputFile, "%i", &size);
             Value resultOfGet = get(map, wrapInt(size));
             if (isNone(resultOfGet))
-                fprintf(outputFile, "0\n");
+                fprintf(outputResultsFile, "0\n");
             else
-                fprintf(outputFile, "%i\n", getInt(resultOfGet));
+                fprintf(outputResultsFile, "%i\n", getInt(resultOfGet));
 
         } else if (strcmp(command, "SELECT") == 0) {
             int size = 0;
             fscanf(inputFile, "%i", &size);
             Value suitableSizeValue = getLowerBound(map, wrapInt(size));
             if (isNone(suitableSizeValue))
-                fprintf(outputFile, "SORRY\n");
+                fprintf(outputResultsFile, "SORRY\n");
             else {
-                fprintf(outputFile, "%i\n", getInt(suitableSizeValue));
+                fprintf(outputResultsFile, "%i\n", getInt(suitableSizeValue));
                 int newCount = getInt(get(map, suitableSizeValue)) - 1;
                 if (newCount == 0)
                     removeKey(map, suitableSizeValue);
@@ -73,13 +77,15 @@ int main(int argc, char* argv[])
             return -1;
         }
     }
-    keyValuePair* array = getKeysValueInArray(map);
-    for (int i = 0; i < 124; i++){
-        printf("%i %i\n", getInt(array[i].key), getInt(array[i].value));
-    }
+    int sizeOfArray = 0;
+    keyValuePair* array = getKeysValuesArray(map, &sizeOfArray);
+    for (int i = 0; i < sizeOfArray; i++)
+        fprintf(outputBalanceFile, "%i %i\n", getInt(array[i].key), getInt(array[i].value));
 
+    free(array);
     deleteTreeMap(map);
 
     fclose(inputFile);
-    fclose(outputFile);
+    fclose(outputResultsFile);
+    fclose(outputBalanceFile);
 }

@@ -296,8 +296,6 @@ Pair makePair(Node* first, Node* second)
     return (Pair) { first, second };
 }
 
-// Возвращает пару из вершины с максимальным ключом и
-// корня дерева поиска после удаления этой вершины
 Pair extractMax(Node* root)
 {
     if (root->rightChild) {
@@ -373,15 +371,16 @@ void traverse(Node* root, int* idx, keyValuePair* array)
         traverse(root->leftChild, idx, array);
     array[*idx].key = root->key;
     array[*idx].value = root->value;
-    *idx++;
+    (*idx)++;
     if (root->rightChild)
         traverse(root->rightChild, idx, array);
 }
 
-keyValuePair* getKeysValueInArray(TreeMap* map){
-    keyValuePair* array = malloc(sizeof(keyValuePair) * 1 << getHeight(map->root));
+keyValuePair* getKeysValuesArray(TreeMap* map, int* sizeOfArray)
+{
+    keyValuePair* array = malloc(sizeof(keyValuePair) * ((1 << getHeight(map->root)) + 1));
     int idx = 0;
     traverse(map->root, &idx, array);
+    *sizeOfArray = idx;
     return array;
 }
-
