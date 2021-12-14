@@ -72,6 +72,8 @@ Node* rotateRight(Node* root)
 
 int getBalanceFactor(Node* root)
 {
+    if (!root)
+        return 0;
     int left = root->leftChild ? root->leftChild->height : 0;
     int right = root->rightChild ? root->rightChild->height : 0;
     return right - left;
@@ -84,6 +86,7 @@ Node* balance(Node* root)
             root->rightChild = rotateRight(root->rightChild);
         return rotateLeft(root);
     }
+
     if (getBalanceFactor(root) == -2) {
         if (getBalanceFactor(root->leftChild) == 1)
             root->leftChild = rotateLeft(root->leftChild);
@@ -163,21 +166,21 @@ Node* getNodeWithMinKey(Node* node)
 
 Value getLowerBound(TreeMap* map, Value key)
 {
-    if (map->root == NULL)
+    Node* node = map->root;
+    if (!node)
         return wrapNone();
 
-    Node* node = map->root;
-    Value lowerBound = getMaximum(map);
-    if (compare(lowerBound, key) < 0)
-        return wrapNone();
-    printf("%i\n", getInt(lowerBound));
+    Value lowerBound = map->root->key;
     while (node) {
         if (compare(node->key, key) >= 0) {
             lowerBound = node->key;
             node = node->leftChild;
         } else {
-            if (!node->rightChild)
+            if (!node->rightChild) {
+                if (compare(lowerBound, key) >= 0)
+                    return lowerBound;
                 return wrapNone();
+            }
             node = node->rightChild;
         }
     }
@@ -333,9 +336,9 @@ Node* deleteNodeWithoutBalance(Node* root, Value key)
 
 void deleteNode(TreeMap* map, Node* node)
 {
-    Node* newRoot = deleteNodeWithoutBalance(map->root, node->key);
+    map->root = deleteNodeWithoutBalance(map->root, node->key);
     updateHeight(map->root);
-    balance(newRoot);
+    balance(map->root);
 }
 
 MapEntry removeKey(TreeMap* map, Value key)
