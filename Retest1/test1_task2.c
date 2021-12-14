@@ -11,7 +11,7 @@ int main()
     FILE* inputFile = fopen(nameOfInputFile, "r");
     FILE* outputFile = fopen(nameOfOutputFile, "w");
     char c = '0';
-    int statistic[26];
+    long long statistic[26];
     for (int i = 0; i < 26; i++)
         statistic[i] = 0;
 
@@ -21,7 +21,7 @@ int main()
 
     for (int i = 0; i < 26; i++)
         if (statistic[i] > 0)
-            fprintf(outputFile, "%c: %i\n", (char)(97 + i), statistic[i]);
+            fprintf(outputFile, "%c: %lli\n", (char)(97 + i), statistic[i]);
 
     fclose(inputFile);
     fclose(outputFile);
