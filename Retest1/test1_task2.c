@@ -15,15 +15,14 @@ int main()
     for (int i = 0; i < 26; i++)
         statistic[i] = 0;
 
-    while ((c = getc(inputFile)) != EOF) {
+    while ((c = getc(inputFile)) != EOF)
         if ((int)c > 96 && (int)c < 123)
             statistic[(int)c - 97]++;
-    }
-    for (int i = 0; i < 26; i++){
+
+    for (int i = 0; i < 26; i++)
         if (statistic[i] > 0)
-        fprintf(outputFile, "%c: %i\n", (char)(97+i), statistic[i]);
-    }
+            fprintf(outputFile, "%c: %i\n", (char)(97 + i), statistic[i]);
+
     fclose(inputFile);
     fclose(outputFile);
-
 }
