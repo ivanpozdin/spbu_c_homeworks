@@ -8,7 +8,7 @@
 typedef struct TreeMap TreeMap;
 typedef struct TreeMapIterator TreeMapIterator;
 
-typedef struct MapEntry{
+typedef struct MapEntry {
     Value key;
     Value value;
 } MapEntry;
@@ -38,5 +38,5 @@ void next(TreeMapIterator* iterator, bool leftChildIsNotUsed);
 bool hasElement(TreeMapIterator* iterator);
 
 void deleteTreeMap(TreeMap* tree);
-
+void traverseMap(TreeMap* map);
 #endif // SPBU_C_HOMEWORKS_HOMEWORK5_TREEMAP_H_

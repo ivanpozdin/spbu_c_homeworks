@@ -366,3 +366,17 @@ void deleteTreeMap(TreeMap* tree)
         freeSubTree(tree->root);
     free(tree);
 }
+
+void traverse(Node* root)
+{
+    if (root->leftChild)
+        traverse(root->leftChild);
+    printf("\n%d %d", getInt(root->key), getInt(root->value));
+    if (root->rightChild)
+        traverse(root->rightChild);
+}
+
+void traverseMap(TreeMap* map)
+{
+    traverse(map->root);
+}
