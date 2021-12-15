@@ -28,14 +28,14 @@ LinkedMapElement* find(LinkedMap* map, const char* key)
     return NULL;
 }
 
-bool hasKey(LinkedMap* map, const char* key)
+bool hasKeyInLinkedMap(LinkedMap* map, const char* key)
 {
     return find(map, key);
 }
 
-int get(LinkedMap* map, const char* key, int defaultValue)
+int getValueFromKeyInLinkedMap(LinkedMap* map, const char* key, int defaultValue)
 {
-    if (hasKey(map, key))
+    if (hasKeyInLinkedMap(map, key))
         return find(map, key)->value;
     return defaultValue;
 }
@@ -55,9 +55,9 @@ void insertKey(LinkedMap* map, const char* key, int value)
     map->head = newElement;
 }
 
-void put(LinkedMap* map, const char* key, int value)
+void putKeyInLinkedMap(LinkedMap* map, const char* key, int value)
 {
-    if (hasKey(map, key))
+    if (hasKeyInLinkedMap(map, key))
         changeValue(map, key, value);
     else
         insertKey(map, key, value);
@@ -70,7 +70,7 @@ void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separat
     }
 }
 
-void deleteMap(LinkedMap* map)
+void deleteLinkedMap(LinkedMap* map)
 {
     LinkedMapElement* nextElement = NULL;
     for (LinkedMapElement* currentElement = map->head; currentElement; currentElement = nextElement) {
