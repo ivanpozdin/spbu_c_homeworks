@@ -29,12 +29,12 @@ int main(int argc, char* argv[], char* envp[])
     }
     char word[128];
     while (fscanf(inputFile, "%s", word) != EOF) {
-        put(map, word, get(map, word, 0) + 1);
+        putKeyInLinkedMap(map, word, getValueFromKeyInLinkedMap(map, word, 0) + 1);
     }
 
     printAllKeysAndValues(outputFile, map, ',');
 
-    deleteMap(map);
+    deleteLinkedMap(map);
     fclose(inputFile);
     fclose(outputFile);
 }

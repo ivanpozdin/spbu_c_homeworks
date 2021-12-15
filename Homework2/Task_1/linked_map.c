@@ -33,7 +33,7 @@ bool hasKeyInLinkedMap(LinkedMap* map, const char* key)
     return find(map, key);
 }
 
-int get(LinkedMap* map, const char* key, int defaultValue)
+int getValueFromKeyInLinkedMap(LinkedMap* map, const char* key, int defaultValue)
 {
     if (hasKeyInLinkedMap(map, key))
         return find(map, key)->value;
@@ -55,7 +55,7 @@ void insertKey(LinkedMap* map, const char* key, int value)
     map->head = newElement;
 }
 
-void put(LinkedMap* map, const char* key, int value)
+void putKeyInLinkedMap(LinkedMap* map, const char* key, int value)
 {
     if (hasKeyInLinkedMap(map, key))
         changeValue(map, key, value);
@@ -70,7 +70,7 @@ void printAllKeysAndValues(FILE* outputFile, struct LinkedMap* map, char separat
     }
 }
 
-void deleteMap(LinkedMap* map)
+void deleteLinkedMap(LinkedMap* map)
 {
     LinkedMapElement* nextElement = NULL;
     for (LinkedMapElement* currentElement = map->head; currentElement; currentElement = nextElement) {
