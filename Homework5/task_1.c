@@ -48,13 +48,13 @@ int main(int argc, char* argv[])
             fscanf(inputFile, "%i", &count);
             int countWas = 0;
             if (hasKey(map, wrapInt(size)))
-                countWas = getInt(get(map, wrapInt(size)));
+                countWas = getInt(getValueFromKey(map, wrapInt(size)));
             put(map, wrapInt(size), wrapInt(count + countWas));
 
         } else if (strcmp(command, "GET") == 0) {
             int size = 0;
             fscanf(inputFile, "%i", &size);
-            Value resultOfGet = get(map, wrapInt(size));
+            Value resultOfGet = getValueFromKey(map, wrapInt(size));
             if (isNone(resultOfGet))
                 fprintf(outputResultsFile, "0\n");
             else
@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
                 fprintf(outputResultsFile, "SORRY\n");
             else {
                 fprintf(outputResultsFile, "%i\n", getInt(suitableSizeValue));
-                int newCount = getInt(get(map, suitableSizeValue)) - 1;
+                int newCount = getInt(getValueFromKey(map, suitableSizeValue)) - 1;
                 if (newCount == 0)
                     removeKey(map, suitableSizeValue);
                 else

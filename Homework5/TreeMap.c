@@ -142,7 +142,7 @@ bool hasKey(TreeMap* map, Value key)
     return false;
 }
 
-Value get(TreeMap* map, Value key)
+Value getValueFromKey(TreeMap* map, Value key)
 {
     Node* node = findNodeWithGivenKey(map->root, key);
     if (node)

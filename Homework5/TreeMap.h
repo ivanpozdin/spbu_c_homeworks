@@ -24,7 +24,7 @@ void put(TreeMap* map, Value key, Value value);
 
 MapEntry removeKey(TreeMap* map, Value key);
 
-Value get(TreeMap* map, Value key);
+Value getValueFromKey(TreeMap* map, Value key);
 
 bool hasKey(TreeMap* map, Value key);
 
