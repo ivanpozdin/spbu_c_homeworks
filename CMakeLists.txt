@@ -24,7 +24,6 @@ add_executable(task_3.3 Homework3/task_3.c)
 add_executable(task_5.1 Homework5/task_1.c)
 target_link_libraries(task_5.1 library)
 include_directories(library)
-include_directories(Homework5)
 
 add_executable(Test2_task_1 Test2/task_1.c)
 

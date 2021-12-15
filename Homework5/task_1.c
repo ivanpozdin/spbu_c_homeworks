@@ -5,18 +5,21 @@
 
 int main(int argc, char* argv[])
 {
-    char nameOfInputFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_logs.txt";
-    char nameOfOutputResultsFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_results.txt";
-    char nameOfOutputBalanceFile[150] = "/Users/ivanpozdin/CLionProjects/spbu_c_homeworks/Homework5/shop_balance.txt";
-    //        if (argc == 1) {
-    //            //printf("Enter the name of the file whose contents you want to analyze:\n");
-    //            scanf("%s", nameOfInputFile);
-    //            //printf("Enter the name of the file in which you want to record the result of the frequency analysis:\n");
-    //            scanf("%s", nameOfOutputResultsFile);
-    //        } else {
-    //            strcpy(nameOfInputFile, argv[1]);
-    //            strcpy(nameOfOutputResultsFile, argv[2]);
-    //        }
+    char nameOfInputFile[150];
+    char nameOfOutputResultsFile[150];
+    char nameOfOutputBalanceFile[150];
+    if (argc == 1) {
+        printf("Enter the name of the file whose contents you want to analyze:\n");
+        scanf("%s", nameOfInputFile);
+        printf("Enter the name of the file in which you want to record the results:\n");
+        scanf("%s", nameOfOutputResultsFile);
+        printf("Enter the name of the file in which you want to record the balance:\n");
+        scanf("%s", nameOfOutputBalanceFile);
+    } else {
+        strcpy(nameOfInputFile, argv[1]);
+        strcpy(nameOfOutputResultsFile, argv[2]);
+        strcpy(nameOfOutputBalanceFile, argv[3]);
+    }
     FILE* inputFile = fopen(nameOfInputFile, "r");
     FILE* outputResultsFile = fopen(nameOfOutputResultsFile, "w");
     FILE* outputBalanceFile = fopen(nameOfOutputBalanceFile, "w");
