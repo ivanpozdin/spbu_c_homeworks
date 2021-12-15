@@ -95,14 +95,14 @@ Node* balance(Node* root)
     return root;
 }
 
-Node* find(Node* root, Value key)
+Node* findNodeWithGivenKey(Node* root, Value key)
 {
     if (!root)
         return NULL;
     if (compare(root->key, key) > 0)
-        return find(root->leftChild, key);
+        return findNodeWithGivenKey(root->leftChild, key);
     else if (compare(root->key, key) < 0)
-        return find(root->rightChild, key);
+        return findNodeWithGivenKey(root->rightChild, key);
     return root;
 }
 
@@ -144,7 +144,7 @@ bool hasKey(TreeMap* map, Value key)
 
 Value get(TreeMap* map, Value key)
 {
-    Node* node = find(map->root, key);
+    Node* node = findNodeWithGivenKey(map->root, key);
     if (node)
         return node->value;
     return wrapNone();
@@ -341,7 +341,7 @@ void deleteNode(TreeMap* map, Node* node)
 
 MapEntry removeKey(TreeMap* map, Value key)
 {
-    Node* node = find(map->root, key);
+    Node* node = findNodeWithGivenKey(map->root, key);
     if (!node)
         return (MapEntry) { wrapNone(), wrapNone() };
     MapEntry mapEntry = (MapEntry) { node->key, node->value };
