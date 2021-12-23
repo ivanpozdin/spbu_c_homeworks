@@ -20,3 +20,4 @@ add_executable(task_3.3 Homework3/task_3.c)
 
 add_executable(retest1_1.2 Retest1/test1_task2.c)
 add_executable(Test2_task_1 Test2/task_1.c)
+add_executable(Final_Test_task_1 Final_Test/task_1.c)
