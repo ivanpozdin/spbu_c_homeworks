@@ -9,7 +9,6 @@
 
 typedef struct LinkedMap LinkedMap;
 typedef struct LinkedMapElement LinkedMapElement;
-
 LinkedMap* makeNewLinkedMap();
 void put(LinkedMap* map, const char* key, int value);
 int get(LinkedMap* map, const char* key, int defaultValue);
