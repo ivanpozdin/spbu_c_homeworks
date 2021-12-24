@@ -3,7 +3,9 @@ project(spbu_c_homeworks C)
 
 set(CMAKE_C_STANDARD 11)
 set(SOURCE_LIB
-    library/commonUtils/numericOperations.c Homework2/Task_1/linked_map.c)
+    library/commonUtils/numericOperations.c Homework2/Task_1/linked_map.c
+        library/priorityQueue/priorityQueue.c library/priorityQueue/priorityQueue.h
+        library/values/values.c library/values/values.h)
 add_library(library ${SOURCE_LIB})
 
 add_executable(task_1.1 Homework1/task1.c)
@@ -21,3 +23,6 @@ add_executable(task_3.3 Homework3/task_3.c)
 add_executable(retest1_1.2 Retest1/test1_task2.c)
 add_executable(Test2_task_1 Test2/task_1.c)
 add_executable(Final_Test_task_1 Final_Test/task_1.c)
+add_executable(Final2_z_2 Final2/z_2.c)
+include_directories(library)
+target_link_libraries(Final2_z_2 library)
