@@ -37,7 +37,7 @@ void enqueue(Value value, int priority, PriorityQueue* queue)
         return;
     }
     queueElement* currentElement = queue->head;
-    if (newElement->priority > queue->head->priority) {
+    if (newElement->priority >= queue->head->priority) {
         queueElement* tmpElement = queue->head;
         queue->head = newElement;
         queue->head->nextElement = tmpElement;
