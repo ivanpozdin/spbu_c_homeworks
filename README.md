@@ -1,2 +1,2 @@
 # C programming
-homework assignments for the C programming course in SPBU
+Repo for 1 term homeworks and tests for C programming course in SPBU
